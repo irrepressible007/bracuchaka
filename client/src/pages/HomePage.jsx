@@ -30,11 +30,11 @@ function HomePage() {
           {/* Left Side: Illustration */}
           <div className="md:w-1/2 w-full mb-10 md:mb-0">
             {/* --- THIS IS THE FIX --- */}
-            {/* This now points to your /land.png file in the public folder */}
+            {/* Changed w-full to w-3/4 and added mx-auto */}
             <img 
-              src="/logo.png" 
+              src="/land.png" 
               alt="Connecting Campus Illustration" 
-              className="w-full h-auto rounded-lg shadow-lg"
+              className="w-3/4 mx-auto h-auto rounded-lg shadow-lg"
             />
           </div>
 
