@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+// We no longer import the Logo component
 
 function HomePage() {
   return (
@@ -9,9 +10,21 @@ function HomePage() {
       {/* Header */}
       <header className="w-full bg-white shadow-md">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-600">
-            BRACU-CHAKA
-          </div>
+          
+          {/* --- THIS IS THE FIX --- */}
+          <Link to="/" className="flex items-center space-x-2">
+            {/* Use the logo.png from the /public folder */}
+            <img 
+              src="/logo.png" 
+              alt="BRACU-CHAKA Logo" 
+              className="h-8 w-auto" // You can adjust h-8 (height) as needed
+            />
+            <span className="text-2xl font-bold text-blue-600">
+              BRACU-CHAKA
+            </span>
+          </Link>
+          {/* --- END OF FIX --- */}
+
           <div>
             <Link 
               to="/login" 
@@ -27,10 +40,7 @@ function HomePage() {
       <main className="flex-1 flex items-center bg-blue-50">
         <div className="container mx-auto px-6 py-16 flex flex-col md:flex-row items-center">
           
-          {/* Left Side: Illustration */}
           <div className="md:w-1/2 w-full mb-10 md:mb-0">
-            {/* --- THIS IS THE FIX --- */}
-            {/* Changed w-full to w-3/4 and added mx-auto */}
             <img 
               src="/land.png" 
               alt="Connecting Campus Illustration" 
@@ -38,7 +48,6 @@ function HomePage() {
             />
           </div>
 
-          {/* Right Side: Text Content */}
           <div className="md:w-1/2 md:pl-12 text-center md:text-left">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
               Connecting Campus, One Ride at a Time.

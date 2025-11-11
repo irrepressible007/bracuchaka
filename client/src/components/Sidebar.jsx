@@ -1,7 +1,7 @@
 // client/src/components/Sidebar.jsx
 
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
 
 const SidebarLink = ({ to, children }) => (
@@ -19,50 +19,67 @@ const SidebarLink = ({ to, children }) => (
 
 function Sidebar() {
   const user = JSON.parse(localStorage.getItem('user'));
-  const activeMode = localStorage.getItem('activeMode'); // Reads the mode set at login
+  const activeMode = localStorage.getItem('activeMode');
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    localStorage.removeItem('activeMode'); // Clear the mode
+    localStorage.removeItem('activeMode');
     setAuthToken(null);
     navigate('/login');
   };
 
+  const handleModeSwitch = () => {
+    const newMode = activeMode === 'USER' ? 'RIDER' : 'USER';
+    localStorage.setItem('activeMode', newMode);
+    navigate(newMode === 'USER' ? '/dashboard' : '/rider/dashboard');
+    window.location.reload();
+  };
+
   return (
     <div className="w-64 min-h-screen bg-blue-800 text-white flex flex-col p-4 shadow-lg">
-      <h1 className="text-3xl font-bold text-center mb-10 text-white">
-        BRACU-CHAKA
-      </h1>
       
-      {/* --- SWITCH MODE BUTTON IS REMOVED --- */}
+      <Link to="/" className="flex items-center justify-center space-x-3 mb-10">
+        <img 
+          src="/logo.png" 
+          alt="BRACU-CHAKA Logo" 
+          className="h-10 w-auto"
+        />
+        <h1 className="text-3xl font-bold text-white">
+          BRACU-CHAKA
+        </h1>
+      </Link>
+
+      {user?.isRider && (
+        <div className="mb-4">
+          <button
+            onClick={handleModeSwitch}
+            className="w-full px-4 py-3 rounded-md text-center font-semibold bg-green-500 hover:bg-green-600 text-white transition-colors duration-200"
+          >
+            {activeMode === 'USER' ? 'Switch to Rider Mode' : 'Switch to User Mode'}
+          </button> {/* <-- THIS IS THE FIX (was </Nothing>) */}
+        </div>
+      )}
 
       <nav className="flex-1 space-y-2">
-        {/* --- Links for USER Mode --- */}
         {activeMode === 'USER' && (
           <>
             <SidebarLink to="/dashboard">Search Rides</SidebarLink>
-            {/* <SidebarLink to="/my-bookings">My Bookings</SidebarLink> */}
             {!user.isRider && (
               <SidebarLink to="/become-rider">Become a Rider</SidebarLink>
             )}
           </>
         )}
-
-        {/* --- Links for RIDER Mode --- */}
         {activeMode === 'RIDER' && (
           <>
             <SidebarLink to="/rider/dashboard">My Offered Rides</SidebarLink>
             <SidebarLink to="/rider/create-ride">Offer a Ride</SidebarLink>
           </>
         )}
-
-        {/* --- Links for ADMIN Mode --- */}
         {user?.role === 'ADMIN' && (
           <>
             <SidebarLink to="/admin/dashboard">Pending Approvals</SidebarLink>
-            {/* <SidebarLink to="/admin/all-users">Manage Users</SidebarLink> */}
           </>
         )}
       </nav>
@@ -80,5 +97,3 @@ function Sidebar() {
 }
 
 export default Sidebar;
-
-
