@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 const getAuthToken = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
-  return user ? user.token : null;
+  return localStorage.getItem('token');
 };
 
 const RideRequestForm = () => {
@@ -19,13 +18,16 @@ const RideRequestForm = () => {
     setIsLoading(true);
 
     try {
-      // --- THIS IS THE FIX ---
-      // I have replaced the relative URL with the full, absolute URL of your backend.
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('No token found. Please log in again.');
+      }
+
       const response = await fetch('http://localhost:5000/api/rides/request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${getAuthToken()}`
+          'x-auth-token': token
         },
         body: JSON.stringify({ startLocation, destination })
       });
