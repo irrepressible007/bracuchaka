@@ -7,15 +7,82 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-// ... (your '/register' route is fine) ...
+// --- REGISTRATION ROUTE ---
 router.post('/register', async (req, res) => {
-    // ... same code as before
-    // All users register as role: 'USER' by default
-    // ...
+  const { name, email, password } = req.body;
+
+  try {
+    // 1. Check for missing fields
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Please provide name, email, and password' });
+    }
+
+    // 2. Check if user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // 3. Validate university email
+    const emailRegex = /@(g\.bracu\.ac\.bd|bracu\.ac\.bd)$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Must use a valid BRACU email (@bracu.ac.bd or @g.bracu.ac.bd)' });
+    }
+
+    // 4. Create new user instance
+    user = new User({
+      name,
+      email,
+      password,
+    });
+
+    // 5. Hash the password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    // 6. Save user to database
+    await user.save();
+
+    // 7. Create and return a JWT
+    const payload = {
+      user: {
+        id: user.id,
+        role: user.role,
+      },
+    };
+
+    // Make sure JWT_SECRET is in your .env file
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' },
+      (err, token) => {
+        if (err) throw err;
+        res.status(201).json({ 
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            isRider: user.isRider,
+          }
+        });
+      }
+    );
+
+  } catch (err) {
+    // This is the error we need to see
+    console.error('REGISTRATION ERROR:', err.message); 
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: err.message });
+    }
+    res.status(500).send('Server error');
+  }
 });
 
 
-// --- UPDATED LOGIN ROUTE ---
+// --- LOGIN ROUTE ---
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -30,11 +97,10 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // The payload still needs the user's *base* role (USER or ADMIN)
     const payload = {
       user: {
         id: user.id,
-        role: user.role, // This will be 'USER' or 'ADMIN'
+        role: user.role,
       },
     };
 
@@ -45,21 +111,20 @@ router.post('/login', async (req, res) => {
       (err, token) => {
         if (err) throw err;
         
-        // Send back the full user info, including the new 'isRider' permission
         res.json({
           token,
           user: {
             id: user.id,
             name: user.name,
             email: user.email,
-            role: user.role, // 'USER' or 'ADMIN'
-            isRider: user.isRider, // true or false
+            role: user.role,
+            isRider: user.isRider,
           }
         });
       }
     );
   } catch (err) {
-    console.error(err.message);
+    console.error('LOGIN ERROR:', err.message);
     res.status(500).send('Server error');
   }
 });

@@ -5,32 +5,28 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     unique: true,
     trim: true,
     lowercase: true,
   },
   name: {
     type: String,
-    required: true,
+    required: [true, 'Name is required'],
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Password is required'],
   },
   role: {
     type: String,
-    enum: ['USER', 'ADMIN'], // We are REMOVING 'RIDER' (my old 'DRIVER') from here
+    enum: ['USER', 'ADMIN'],
     default: 'USER',
   },
-  
-  // --- NEW PERMISSION FIELD ---
-  // This is the key. If true, this user has the *ability* to be a RIDER.
   isRider: {
     type: Boolean,
     default: false,
   },
-
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

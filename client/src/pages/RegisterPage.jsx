@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken'; 
 
-const API_URL = '/api'; 
+const API_URL = 'http://localhost:5000/api'; 
 
 function RegisterPage() {
   const [name, setName] = useState('');
@@ -21,13 +21,15 @@ function RegisterPage() {
     e.preventDefault();
     setError('');
 
+    const emailRegex = /@(g\.bracu\.ac\.bd|bracu\.ac\.bd)$/;
+    if (!emailRegex.test(email)) {
+        setError('Must use a valid BRACU email (@bracu.ac.bd or @g.bracu.ac.bd)');
+        return;
+    }
+
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
-    }
-    if (!email.endsWith('@bracu.ac.bd')) {
-        setError('Must use a valid BRACU email address');
-        return;
     }
 
     try {
@@ -42,7 +44,6 @@ function RegisterPage() {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
       setAuthToken(token); 
-      
       localStorage.setItem('activeMode', 'USER');
 
       if (wantsToDrive) {
@@ -51,7 +52,7 @@ function RegisterPage() {
         navigate('/dashboard');
       }
 
-    } catch (err) { 
+    } catch (err) {
       if (err.response && err.response.data) {
         setError(err.response.data.message); 
       } else {
@@ -63,23 +64,18 @@ function RegisterPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Background Image: Now points to /bg.png */}
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center"
-        style={{ backgroundImage: "url('/bg.png')" }} 
+        // --- THIS IS THE FIX ---
+        style={{ backgroundImage: "url('/bg.png')" }}
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 w-full h-full bg-black opacity-30"></div>
+        <div className="absolute inset-0 w-full h-full bg-black opacity-40"></div>
       </div>
 
       <div className="relative z-10 bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        
-        <img 
-          src="/logo.png" 
-          alt="BRACU-CHAKA Logo" 
-          className="w-48 mx-auto mb-6"
-        />
-        
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          BRACU-CHAKA
+        </h2>
         <h3 className="text-xl font-semibold text-center text-gray-600 mb-6">
           Create Your Account
         </h3>
@@ -123,7 +119,7 @@ function RegisterPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="your.name@bracu.ac.bd"
+              placeholder="name@g.bracu.ac.bd"
             />
           </div>
 
@@ -152,7 +148,7 @@ function RegisterPage() {
               name="wantsToDrive"
               type="checkbox"
               checked={wantsToDrive}
-              onChange={(e) => setWantsToDrive(e.target.checked)} 
+              onChange={(e) => setWantsToDrive(e.target.checked)}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
             <label htmlFor="wantsToDrive" className="ml-2 block text-sm text-gray-900">
