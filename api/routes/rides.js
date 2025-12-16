@@ -3,7 +3,7 @@ const router = express.Router();
 const Ride = require('../models/Ride');
 const Vehicle = require('../models/Vehicle');
 // --- I'VE ADDED THE NEW MODEL ---
-const RideRequest = require('../models/RideRequest'); 
+const RideRequest = require('../models/RideRequest');
 const { auth, authorize } = require('../middleware/auth');
 
 // This is your existing route for creating a ride
@@ -53,6 +53,48 @@ router.post('/request', auth, async (req, res) => {
 
   } catch (err) {
     console.error('Error creating ride request:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// --- NEW ROUTES ---
+
+// GET all pending ride requests (For Drivers)
+// Protected: Only logged-in users (ideally drivers) can see this
+router.get('/requests/pending', auth, async (req, res) => {
+  try {
+    // optional: check if req.user is a driver?
+    // const requests = await RideRequest.find({ status: 'pending' }).populate('requester', 'name email');
+    const requests = await RideRequest.find({ status: 'pending' }).populate('requester', 'name');
+    res.json(requests);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// PUT accept a ride request
+router.put('/request/:id/accept', auth, async (req, res) => {
+  try {
+    const rideRequest = await RideRequest.findById(req.params.id);
+
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
+    }
+
+    if (rideRequest.status !== 'pending') {
+      return res.status(400).json({ message: 'Ride request is already processed' });
+    }
+
+    // Update the request
+    rideRequest.status = 'accepted';
+    rideRequest.driver = req.user.id; // Assign the logged-in user as the driver
+
+    await rideRequest.save();
+
+    res.json({ message: 'Ride request accepted', rideRequest });
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send('Server Error');
   }
 });

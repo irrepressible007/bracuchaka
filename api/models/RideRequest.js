@@ -21,6 +21,11 @@ const RideRequestSchema = new Schema({
     enum: ['pending', 'accepted', 'completed', 'cancelled'],
     default: 'pending',
   },
+  driver: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    default: null,
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('RideRequest', RideRequestSchema);
