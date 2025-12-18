@@ -11,10 +11,11 @@ import AdminDashboard from './pages/AdminDashboard';
 import CreateRidePage from './pages/CreateRidePage';
 import HomePage from './pages/HomePage'; // 1. Import new Homepage
 import RiderDashboard from './pages/RiderDashboard';
+import UserDashboard from './pages/UserDashboard'; // IMPORT the new page
 
 // --- Renaming for clarity ---
 const BecomeRiderPage = BecomeDriverPage;
-const UserDashboard = () => <h1 className="text-3xl font-bold">Search for Rides</h1>;
+// const UserDashboard = ... REMOVED inline placeholder
 // const RiderDashboard = () => <h1 className="text-3xl font-bold">My Offered Rides</h1>; // REMOVED inline component
 
 // This component now decides where a logged-in user goes

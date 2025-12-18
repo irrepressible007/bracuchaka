@@ -73,6 +73,17 @@ router.get('/requests/pending', auth, async (req, res) => {
   }
 });
 
+// GET my ride requests (For Passengers)
+router.get('/requests/my', auth, async (req, res) => {
+  try {
+    const requests = await RideRequest.find({ requester: req.user.id }).sort({ createdAt: -1 });
+    res.json(requests);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // PUT accept a ride request
 router.put('/request/:id/accept', auth, async (req, res) => {
   try {
@@ -93,6 +104,38 @@ router.put('/request/:id/accept', auth, async (req, res) => {
     await rideRequest.save();
 
     res.json({ message: 'Ride request accepted', rideRequest });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// PUT cancel a ride request
+router.put('/request/:id/cancel', auth, async (req, res) => {
+  console.log('--- CANCEL REQUEST HIT ---');
+  console.log('Request ID:', req.params.id);
+  console.log('User ID:', req.user.id);
+
+  try {
+    const rideRequest = await RideRequest.findById(req.params.id);
+
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
+    }
+
+    // Check if the logged-in user is the one who made the request
+    if (rideRequest.requester.toString() !== req.user.id) {
+      return res.status(401).json({ message: 'User not authorized to cancel this request' });
+    }
+
+    if (rideRequest.status !== 'pending') {
+      return res.status(400).json({ message: 'Only pending requests can be cancelled' });
+    }
+
+    rideRequest.status = 'cancelled';
+    await rideRequest.save();
+
+    res.json({ message: 'Ride request cancelled successfully', rideRequest });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
