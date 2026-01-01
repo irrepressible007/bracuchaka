@@ -1,0 +1,48 @@
+BRACU CHAKA PROJECT MANUAL
+==========================
+
+1. ACCESSING THE SYSTEM
+-----------------------
+
+A. PASSENGER & DRIVER (Public Access)
+   - URL: http://localhost:5173/ or http://localhost:5173/login
+   - Login/Register: Standard login for Riders and Passengers.
+
+B. ADMIN DASHBOARD (Hidden & Secure)
+   - Direct Link: http://localhost:5173/admin/dashboard
+   - Login Page: http://localhost:5173/admin/login
+   - IMPORTANT: 
+     1. There is NO link on the main site. You must know the URL.
+     2. If you are not logged in as Admin, you are redirected to the Admin Login page.
+     3. You CANNOT log in as a normal user on the Admin Login page.
+
+   - Initial Credentials (Super Admin):
+     Email: admin@bracu-chaka
+     Password: admin1234@
+
+2. NEW FEATURES & CHANGES
+-------------------------
+
+A. ROBUST RIDE FLOW
+   - Single Active Ride: Users limited to one ride at a time.
+   - Dual-Confirmation: Ride ends only when Driver ends + Passenger confirms arrival.
+   - Live Updates: Real-time dashboard syncing.
+
+B. ADMIN ECOSYSTEM
+   - Dedicated Login: Separate secure entry for admins.
+   - Create Admin: Admins can create other admins directly from the dashboard.
+   - User Management: Block, Delete, Promote users.
+   - Live Monitoring: Real-time feed of active rides.
+   - Vehicle Verification: Approve driver vehicles.
+
+3. TECHNICAL IMPLEMENTATION SUMMARY
+-----------------------------------
+
+A. BACKEND (API)
+   - Route `POST /api/admin/create-admin`: Secure endpoint for admin creation.
+   - Middleware: Strict role-based access control.
+
+B. FRONTEND (CLIENT)
+   - `AdminLogin.jsx`: Dedicated login page with role verification.
+   - `AdminDashboard.jsx`: Sidebar layout with "Create Admin" modal and live stats.
+   - `ProtectedRoute.jsx`: Smart redirection logic (`/admin` -> `/admin/login`).
