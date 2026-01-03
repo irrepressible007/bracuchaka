@@ -7,7 +7,31 @@ export default defineConfig({
   server: {
     proxy: {
 
+<<<<<<< HEAD
       '/api': {
+=======
+      '/api/auth': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+
+      '/api/users': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+
+      '/api/vehicles': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+
+      '/api/admin': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+
+      '/api/rides': {
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
         target: 'http://localhost:5000',
         changeOrigin: true,
       },

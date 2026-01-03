@@ -78,7 +78,11 @@ function App() {
               <Route path="/dashboard" element={<UserDashboard />} />
               <Route path="/become-rider" element={<BecomeRiderPage />} />
               <Route path="/fare" element={<RideFarePage />} />
+<<<<<<< HEAD
 
+=======
+              <Route path="/chat" element={<Chat />} />
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
               {/* Tanisha's Restored Routes */}
               <Route path="/my-rides" element={<MyRidesPage />} />

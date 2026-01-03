@@ -86,12 +86,15 @@ router.post('/request', auth, async (req, res) => {
     // 3. Save it to the database
     await newRideRequest.save();
 
+<<<<<<< HEAD
     // Populate (so drivers see name immediately)
     await newRideRequest.populate('requester', 'name');
 
     // Notify all drivers (emitting globally for now)
     req.io.emit('new_ride_request', newRideRequest);
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     // 4. Send a success response
     res.status(201).json({
       message: 'Ride request submitted successfully!',
@@ -123,9 +126,13 @@ router.get('/requests/pending', auth, async (req, res) => {
 // GET my ride requests (For Passengers)
 router.get('/requests/my', auth, async (req, res) => {
   try {
+<<<<<<< HEAD
     const requests = await RideRequest.find({ requester: req.user.id })
       .populate('driver', 'name email profilePhotoUrl')
       .sort({ createdAt: -1 });
+=======
+    const requests = await RideRequest.find({ requester: req.user.id }).sort({ createdAt: -1 });
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     res.json(requests);
   } catch (err) {
     console.error(err.message);
@@ -146,9 +153,14 @@ router.get('/requests/current', auth, async (req, res) => {
 
     const activeRide = await RideRequest.findOne({
       $or: [{ requester: req.user.id }, { driver: req.user.id }],
+<<<<<<< HEAD
       status: { $in: ['accepted', 'in_progress', 'pending'] }
     })
       .sort({ createdAt: -1 })
+=======
+      status: { $in: ['accepted', 'in_progress'] }
+    })
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
       .populate('requester', 'name phone') // Add phone if available in User model
       .populate('driver', 'name phone averageRating ratingCount')
       .populate('vehicle');
@@ -205,6 +217,7 @@ router.put('/request/:id/accept', auth, async (req, res) => {
 
     await rideRequest.save();
 
+<<<<<<< HEAD
     // Populate for frontend
     await rideRequest.populate('driver', 'name phone averageRating ratingCount');
     await rideRequest.populate('vehicle');
@@ -213,6 +226,8 @@ router.put('/request/:id/accept', auth, async (req, res) => {
     // Notify room
     req.io.to(rideRequest._id.toString()).emit('ride_updated', rideRequest);
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     res.json({ message: 'Ride accepted! Please enter PIN from passenger to start.', rideRequest });
   } catch (err) {
     console.error(err.message);
@@ -246,6 +261,7 @@ router.put('/request/:id/start-ride', auth, async (req, res) => {
     rideRequest.status = 'in_progress';
     await rideRequest.save();
 
+<<<<<<< HEAD
     // Populate for frontend
     await rideRequest.populate('driver', 'name phone averageRating ratingCount');
     await rideRequest.populate('vehicle');
@@ -253,6 +269,8 @@ router.put('/request/:id/start-ride', auth, async (req, res) => {
 
     req.io.to(rideRequest._id.toString()).emit('ride_updated', rideRequest);
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     res.json({ message: 'Ride started successfully!', rideRequest });
 
   } catch (err) {
@@ -289,6 +307,7 @@ router.put('/request/:id/reject', auth, async (req, res) => {
 
 // (Removed orphaned lines)
 
+<<<<<<< HEAD
 // PUT cancel a ride request (Passenger)
 router.put('/request/:id/cancel', auth, async (req, res) => {
   try {
@@ -332,6 +351,8 @@ router.put('/request/:id/cancel', auth, async (req, res) => {
   }
 });
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 // --- NEW: Driver Ends Ride ---
 router.put('/request/:id/driver-end', auth, async (req, res) => {
   try {
@@ -351,6 +372,7 @@ router.put('/request/:id/driver-end', auth, async (req, res) => {
     }
 
     await rideRequest.save();
+<<<<<<< HEAD
 
     // Populate for frontend
     await rideRequest.populate('driver', 'name phone averageRating ratingCount');
@@ -358,6 +380,8 @@ router.put('/request/:id/driver-end', auth, async (req, res) => {
     await rideRequest.populate('requester', 'name phone');
 
     req.io.to(rideRequest._id.toString()).emit('ride_updated', rideRequest);
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     res.json(rideRequest);
 
   } catch (err) {
@@ -385,6 +409,7 @@ router.put('/request/:id/passenger-reach', auth, async (req, res) => {
     }
 
     await rideRequest.save();
+<<<<<<< HEAD
 
     // Populate for frontend
     await rideRequest.populate('driver', 'name phone averageRating ratingCount');
@@ -392,6 +417,8 @@ router.put('/request/:id/passenger-reach', auth, async (req, res) => {
     await rideRequest.populate('requester', 'name phone');
 
     req.io.to(rideRequest._id.toString()).emit('ride_updated', rideRequest);
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     res.json(rideRequest);
 
   } catch (err) {

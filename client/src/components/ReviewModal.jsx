@@ -52,6 +52,7 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
 
         try {
             const token = localStorage.getItem('token');
+<<<<<<< HEAD
             const payload = {
                 rating,
                 comment
@@ -69,6 +70,15 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
             await axios.post(
                 `${API_URL}/reviews`,
                 payload,
+=======
+            await axios.post(
+                `${API_URL}/reviews`,
+                {
+                    bookingId: booking._id,
+                    rating,
+                    comment,
+                },
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }

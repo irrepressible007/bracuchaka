@@ -1,10 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import io from "socket.io-client";
 
 import { API_URL } from '../config';
 import Chat from './Chat';
+=======
+
+import { API_URL } from '../config';
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
 const DriverDashboard = () => {
     const [requests, setRequests] = useState([]);
@@ -22,6 +27,7 @@ const DriverDashboard = () => {
             }
         }, 5000);
         return () => clearInterval(intervalId);
+<<<<<<< HEAD
         return () => clearInterval(intervalId);
     }, [activeRide?._id]);
 
@@ -61,6 +67,9 @@ const DriverDashboard = () => {
 
         return () => socket.disconnect();
     }, [activeRide?._id]);
+=======
+    }, [activeRide?._id]); // Add dependency on ID to restart polling if ride changes
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
     const fetchInitialData = async () => {
         try {
@@ -280,11 +289,14 @@ const DriverDashboard = () => {
                                 {activeRide.driverEnded ? 'Waiting for Passenger...' : 'End Ride'}
                             </button>
                         )}
+<<<<<<< HEAD
 
                         {/* --- Chat Component --- */}
                         <div className="mt-8 h-96">
                             <Chat rideId={activeRide._id} role="driver" />
                         </div>
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                     </div>
                 </div>
             </div>

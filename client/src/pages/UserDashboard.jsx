@@ -4,8 +4,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RideRequestForm from '../components/RideRequestForm';
 import MyRideRequests from '../components/MyRideRequests';
+<<<<<<< HEAD
 import Chat from './Chat';
 import io from "socket.io-client";
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
 import { API_URL } from '../config';
 
@@ -121,6 +124,7 @@ function UserDashboard() {
 
   useEffect(() => {
     fetchInitialData();
+<<<<<<< HEAD
     // Poll for status updates (backup)
     const interval = setInterval(() => {
       checkActiveRide();
@@ -146,6 +150,15 @@ function UserDashboard() {
       return () => socket.disconnect();
     }
   }, [activeRide?._id]);
+=======
+    // Poll for status updates (e.g. driver accepted, driver ended)
+    const interval = setInterval(() => {
+      // If we have an active ride OR we just want to check if a pending request got accepted
+      checkActiveRide();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []); // Run once on mount, polling handles updates
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
   const fetchInitialData = async () => {
     await checkActiveRide();
@@ -241,6 +254,7 @@ function UserDashboard() {
     }
   }
 
+<<<<<<< HEAD
   const handleCancelRequest = async () => {
     if (!activeRide) return;
     if (!window.confirm("Are you sure you want to cancel this ride request?")) return;
@@ -259,6 +273,8 @@ function UserDashboard() {
     }
   };
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
   // --- RENDER ACTIVE RIDE VIEW ---
   if (activeRide && activeRide.driver) { // Only show full "In Ride" view if we have a driver
     return (
@@ -270,7 +286,19 @@ function UserDashboard() {
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
           {/* Header / Map Placeholder */}
+<<<<<<< HEAD
 
+=======
+          <div className="h-48 bg-gray-200 relative">
+            {/* Leaflet map could go here */}
+            <div className="absolute inset-0 flex items-center justify-center text-gray-400 font-bold text-lg">
+              Map View (Tracking...)
+            </div>
+            <div className="absolute bottom-4 left-6 bg-white/90 backdrop-blur px-4 py-1.5 rounded-full shadow-lg text-sm font-bold text-blue-600">
+              {activeRide.status === 'in_progress' ? 'En Route' : (activeRide.status === 'accepted' ? 'Driver Arriving' : 'Arriving')}
+            </div>
+          </div>
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
           {/* PIN Display for Passenger */}
           {activeRide.status === 'accepted' && (
@@ -286,10 +314,17 @@ function UserDashboard() {
             <div className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-bold text-gray-500">
+<<<<<<< HEAD
                   {activeRide.driver?.name?.charAt(0) || '?'}
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">{activeRide.driver?.name || 'Driver'}</h2>
+=======
+                  {activeRide.driver.name.charAt(0)}
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">{activeRide.driver.name}</h2>
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                   <div className="flex items-center text-sm text-gray-500 mt-1">
                     <span className="font-semibold text-gray-700 mr-2">{activeRide.vehicle?.bikeName}</span>
                     <span className="bg-gray-100 px-2 py-0.5 rounded text-xs">{activeRide.vehicle?.plateNumber}</span>
@@ -347,6 +382,7 @@ function UserDashboard() {
             >
               {activeRide.passengerReached ? 'Waiting for Driver...' : 'Reached Destination'}
             </button>
+<<<<<<< HEAD
 
             {/* --- Chat Component --- */}
             <div className="mt-8 h-96">
@@ -355,6 +391,11 @@ function UserDashboard() {
           </div>
         </div>
       </div >
+=======
+          </div>
+        </div>
+      </div>
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     );
   }
 
@@ -396,7 +437,11 @@ function UserDashboard() {
           <div className="text-right">
             <p className="text-sm font-semibold text-blue-800">Going to: {activeRide.destination}</p>
             <button
+<<<<<<< HEAD
               onClick={handleCancelRequest}
+=======
+              onClick={() => { /* Cancel Logic */ }}
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
               className="text-sm text-red-500 hover:text-red-700 font-bold mt-1 underline"
             >
               Cancel Request

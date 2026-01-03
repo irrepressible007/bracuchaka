@@ -63,11 +63,14 @@ const UserSchema = new mongoose.Schema({
     default: 0,
   },
   // --- END OF RATING SYSTEM FIELDS ---
+<<<<<<< HEAD
   
   blockedUsers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
 }, { timestamps: true });
 

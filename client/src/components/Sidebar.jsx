@@ -96,7 +96,11 @@ function Sidebar() {
             </SidebarLink>
             <SidebarLink to="/my-rides">My Rides</SidebarLink>
 
+<<<<<<< HEAD
 
+=======
+            <SidebarLink to="/chat">Chat</SidebarLink>
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
             {!user?.isRider && (
               <SidebarLink to="/become-rider">

@@ -3,8 +3,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+<<<<<<< HEAD
 const http = require('http'); // Import HTTP
 const { Server } = require("socket.io"); // Import Socket.io
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 require('dotenv').config(); // MUST be at the top
 
 const app = express();
@@ -34,6 +37,7 @@ const connectDB = async () => {
   }
 };
 
+<<<<<<< HEAD
 // --- SOCKET.IO SETUP ---
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -72,6 +76,14 @@ io.on("connection", (socket) => {
 
 
 
+=======
+// Middleware to ensure DB is connected before handling requests
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 // --- API Routes ---
 // This now includes all the routes you were missing
 app.get('/api', (req, res) => {
@@ -89,15 +101,22 @@ app.use('/api/profile', require('./routes/profile'));
 app.use('/api/reviews', require('./routes/reviews')); // Register Reviews Route
 app.use('/api/emergency', require('./routes/emergency')); // <-- NEW LINE
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 // --- START THE SERVER ---
 // Only run the server if this file is run directly (not imported)
 if (require.main === module) {
   connectDB().then(() => {
+<<<<<<< HEAD
     // Use 'server.listen' instead of 'app.listen'
     server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+=======
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
   });
 }
 
