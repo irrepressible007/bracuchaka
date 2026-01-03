@@ -30,7 +30,10 @@ const RideSchema = new mongoose.Schema({
     required: true,
     min: 1,
   },
+<<<<<<< HEAD
   // This array will hold the IDs of riders who book this ride
+=======
+>>>>>>> origin/Sanzid
   passengers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -47,4 +50,8 @@ const RideSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+<<<<<<< HEAD
+=======
+// This is the line that makes Ride.find() a function
+>>>>>>> origin/Sanzid
 module.exports = mongoose.model('Ride', RideSchema);

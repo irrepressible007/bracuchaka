@@ -27,6 +27,54 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+<<<<<<< HEAD
+=======
+  isBlocked: {
+    type: Boolean,
+    default: false
+  },
+
+  // --- NEW PROFILE FIELDS ---
+  profilePhotoUrl: {
+    type: String,
+    default: '/default-avatar.png'
+  },
+  department: {
+    type: String,
+    trim: true,
+  },
+  year: {
+    type: Number,
+  },
+  bio: {
+    type: String,
+    trim: true,
+    maxlength: 250,
+  },
+  // --- END OF NEW FIELDS ---
+
+  // --- RATING SYSTEM FIELDS ---
+  averageRating: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 5,
+  },
+  ratingCount: {
+    type: Number,
+    default: 0,
+  },
+  // --- END OF RATING SYSTEM FIELDS ---
+<<<<<<< HEAD
+  
+  blockedUsers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+=======
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
+
+>>>>>>> origin/Sanzid
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

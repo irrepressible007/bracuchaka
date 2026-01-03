@@ -58,7 +58,11 @@ router.post('/register', async (req, res) => {
       { expiresIn: '7d' },
       (err, token) => {
         if (err) throw err;
+<<<<<<< HEAD
         res.status(201).json({ 
+=======
+        res.status(201).json({
+>>>>>>> origin/Sanzid
           token,
           user: {
             id: user.id,
@@ -73,7 +77,11 @@ router.post('/register', async (req, res) => {
 
   } catch (err) {
     // This is the error we need to see
+<<<<<<< HEAD
     console.error('REGISTRATION ERROR:', err.message); 
+=======
+    console.error('REGISTRATION ERROR:', err.message);
+>>>>>>> origin/Sanzid
     if (err.name === 'ValidationError') {
       return res.status(400).json({ message: err.message });
     }
@@ -110,7 +118,11 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' },
       (err, token) => {
         if (err) throw err;
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> origin/Sanzid
         res.json({
           token,
           user: {
@@ -129,4 +141,36 @@ router.post('/login', async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
+=======
+// --- EMERGENCY SETUP ROUTE (TEMP) ---
+router.get('/emergency-setup', async (req, res) => {
+  try {
+    const email = 'admin@bracu-chaka';
+    const password = 'admin1234@';
+
+    // 1. Delete existing to start fresh
+    await User.deleteOne({ email });
+
+    // 2. Create Fresh
+    const user = new User({
+      name: 'Super Admin',
+      email,
+      password, // Pre-hash below
+      role: 'ADMIN',
+      isRider: false
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    await user.save();
+
+    res.json({ msg: 'ADMIN FIXED', email, password_hash: user.password });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+>>>>>>> origin/Sanzid
 module.exports = router;

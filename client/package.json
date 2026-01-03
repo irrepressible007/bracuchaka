@@ -11,9 +11,21 @@
   },
   "dependencies": {
     "axios": "^1.13.2",
+<<<<<<< HEAD
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.5"
+=======
+    "leaflet": "^1.9.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+<<<<<<< HEAD
+    "react-router-dom": "^7.9.5",
+    "socket.io-client": "^4.8.3"
+=======
+    "react-router-dom": "^7.9.5"
+>>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
+>>>>>>> origin/Sanzid
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
