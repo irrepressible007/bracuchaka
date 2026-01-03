@@ -1,0 +1,33 @@
+/* client/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans bg-surface-50 text-surface-900 antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold text-surface-900;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-6 py-2.5 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-all shadow-md hover:shadow-lg font-medium active:scale-95;
+  }
+  .btn-outline {
+    @apply px-6 py-2.5 border-2 border-brand-600 text-brand-600 rounded-lg hover:bg-brand-50 transition-all font-medium;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-surface-200 p-6;
+  }
+  .glass-panel {
+    @apply backdrop-blur-md bg-white/70 border border-white/50 shadow-xl;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg border border-surface-200 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all outline-none bg-surface-50 focus:bg-white;
+  }
+}
