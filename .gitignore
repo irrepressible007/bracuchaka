@@ -5,7 +5,7 @@ package-lock.json
 yarn.lock
 
 # Environment Variables
-.env
+# .env  <-- Uncommented to allow upload as per user request
 .env.local
 .env.development.local
 .env.test.local
