@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-// client/src/components/Sidebar.jsx
 
-=======
->>>>>>> origin/Sanzid
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
@@ -11,14 +7,9 @@ const SidebarLink = ({ to, children }) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
-<<<<<<< HEAD
-      `block px-4 py-3 rounded-md text-gray-200 hover:bg-blue-700 hover:text-white transition-colors duration-200 ${
-        isActive ? 'bg-blue-900 font-semibold' : ''
-=======
       `block px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
         ? 'bg-brand-600 text-white shadow-md'
         : 'text-brand-100 hover:bg-white/10 hover:text-white'
->>>>>>> origin/Sanzid
       }`
     }
   >
@@ -27,10 +18,6 @@ const SidebarLink = ({ to, children }) => (
 );
 
 function Sidebar() {
-<<<<<<< HEAD
-  const user = JSON.parse(localStorage.getItem('user'));
-  const activeMode = localStorage.getItem('activeMode');
-=======
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem('user'));
@@ -42,7 +29,6 @@ function Sidebar() {
   // FIX: Map old 'USER'/'RIDER' mode to 'PASSENGER'
   if (activeModeRaw === 'USER' || activeModeRaw === 'RIDER') activeModeRaw = 'PASSENGER';
   const activeMode = activeModeRaw;
->>>>>>> origin/Sanzid
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -52,74 +38,6 @@ function Sidebar() {
     setAuthToken(null);
     navigate('/login');
   };
-
-<<<<<<< HEAD
-  const handleModeSwitch = () => {
-    const newMode = activeMode === 'USER' ? 'RIDER' : 'USER';
-    localStorage.setItem('activeMode', newMode);
-    navigate(newMode === 'USER' ? '/dashboard' : '/rider/dashboard');
-    window.location.reload();
-  };
-
-  return (
-    <div className="w-64 min-h-screen bg-blue-800 text-white flex flex-col p-4 shadow-lg">
-      
-      <Link to="/" className="flex items-center justify-center space-x-3 mb-10">
-        <img 
-          src="/logo.png" 
-          alt="BRACU-CHAKA Logo" 
-          className="h-10 w-auto"
-        />
-        <h1 className="text-3xl font-bold text-white">
-          BRACU-CHAKA
-        </h1>
-      </Link>
-
-      {user?.isRider && (
-        <div className="mb-4">
-          <button
-            onClick={handleModeSwitch}
-            className="w-full px-4 py-3 rounded-md text-center font-semibold bg-green-500 hover:bg-green-600 text-white transition-colors duration-200"
-          >
-            {activeMode === 'USER' ? 'Switch to Rider Mode' : 'Switch to User Mode'}
-          </button> {/* <-- THIS IS THE FIX (was </Nothing>) */}
-        </div>
-      )}
-
-      <nav className="flex-1 space-y-2">
-        {activeMode === 'USER' && (
-          <>
-            <SidebarLink to="/dashboard">Search Rides</SidebarLink>
-            {!user.isRider && (
-              <SidebarLink to="/become-rider">Become a Rider</SidebarLink>
-            )}
-          </>
-        )}
-        {activeMode === 'RIDER' && (
-          <>
-            <SidebarLink to="/rider/dashboard">My Offered Rides</SidebarLink>
-            <SidebarLink to="/rider/create-ride">Offer a Ride</SidebarLink>
-          </>
-        )}
-        {user?.role === 'ADMIN' && (
-          <>
-            <SidebarLink to="/admin/dashboard">Pending Approvals</SidebarLink>
-          </>
-        )}
-      </nav>
-
-      <div className="mt-auto">
-        <button
-          onClick={handleLogout}
-          className="w-full text-left px-4 py-3 rounded-md text-gray-200 hover:bg-red-700 hover:text-white transition-colors duration-200"
-        >
-          Logout
-=======
-  // Switch between PASSENGER and DRIVER only
-  // Removed handleModeSwitch as per user request (strict session separation)
-
-  // Set up switch button label
-  // Removed getSwitchButtonLabel
 
   return (
     <div className="w-72 h-screen bg-brand-900 text-white flex flex-col p-6 shadow-xl relative overflow-hidden">
@@ -173,11 +91,7 @@ function Sidebar() {
             </SidebarLink>
             <SidebarLink to="/my-rides">My Rides</SidebarLink>
 
-<<<<<<< HEAD
-
-=======
             <SidebarLink to="/chat">Chat</SidebarLink>
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
             {!user?.isRider && (
               <SidebarLink to="/become-rider">
@@ -195,6 +109,12 @@ function Sidebar() {
           </>
         )}
 
+        {user?.role === 'ADMIN' && (
+          <>
+            <SidebarLink to="/admin/dashboard">Pending Approvals</SidebarLink>
+          </>
+        )}
+
 
       </nav>
 
@@ -204,7 +124,6 @@ function Sidebar() {
           className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-lg text-red-300 hover:bg-red-500/10 hover:text-red-200 transition-colors duration-200 text-sm font-medium"
         >
           <span>Logout</span>
->>>>>>> origin/Sanzid
         </button>
       </div>
     </div>

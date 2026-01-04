@@ -52,7 +52,6 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
 
         try {
             const token = localStorage.getItem('token');
-<<<<<<< HEAD
             const payload = {
                 rating,
                 comment
@@ -70,17 +69,8 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
             await axios.post(
                 `${API_URL}/reviews`,
                 payload,
-=======
-            await axios.post(
-                `${API_URL}/reviews`,
                 {
-                    bookingId: booking._id,
-                    rating,
-                    comment,
-                },
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
-                {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { 'x-auth-token': token },
                 }
             );
             onSuccess();
@@ -109,7 +99,11 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
                                     Rate your ride
                                 </h3>
                                 <div className="mt-2 text-sm text-gray-500 mb-6">
-                                    How was your experience with <span className="font-semibold">{booking.ride.driver.name}</span>?
+                                    {booking.ride && booking.ride.driver ? (
+                                        <>How was your experience with <span className="font-semibold">{booking.ride.driver.name}</span>?</>
+                                    ) : (
+                                        <>How was your experience?</>
+                                    )}
                                 </div>
 
                                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -126,7 +120,7 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
                                         <label className="block text-sm font-medium text-gray-700 mb-1">Comment (Optional)</label>
                                         <textarea
                                             rows="3"
-                                            className="input-field w-full"
+                                            className="input-field w-full border border-gray-300 rounded p-2"
                                             placeholder="Share your experience..."
                                             value={comment}
                                             onChange={(e) => setComment(e.target.value)}
@@ -143,14 +137,14 @@ const ReviewModal = ({ isOpen, onClose, booking, onSuccess }) => {
                                         <button
                                             type="submit"
                                             disabled={loading}
-                                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-brand-600 text-base font-medium text-white hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-gray-400"
+                                            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:bg-gray-400"
                                         >
                                             {loading ? 'Submitting...' : 'Submit Review'}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={onClose}
-                                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 sm:mt-0 sm:w-auto sm:text-sm"
+                                            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:w-auto sm:text-sm"
                                         >
                                             Cancel
                                         </button>

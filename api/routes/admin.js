@@ -4,24 +4,9 @@ const express = require('express');
 const router = express.Router();
 const Vehicle = require('../models/Vehicle');
 const User = require('../models/User');
-const { auth, authorize } = require('../middleware/auth');
-<<<<<<< HEAD
-
-// ... (your existing get '/pending-vehicles' route is fine) ...
-router.get('/pending-vehicles', [auth, authorize(['ADMIN'])], async (req, res) => {
-    try {
-      const vehicles = await Vehicle.find({ isVerified: false })
-        .populate('owner', 'name email');
-      res.json(vehicles);
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
-  });
-=======
 const Complaint = require('../models/Complaint');
 const RideRequest = require('../models/RideRequest');
-// const Ride = require('../models/Ride'); // If you use Ride model
+const { auth, authorize } = require('../middleware/auth');
 
 
 // ... (your existing get '/pending-vehicles' route is fine) ...
@@ -35,7 +20,6 @@ router.get('/pending-vehicles', [auth, authorize(['ADMIN'])], async (req, res) =
     res.status(500).send('Server Error');
   }
 });
->>>>>>> origin/Sanzid
 
 
 // --- UPDATED LOGIC ---
@@ -50,11 +34,7 @@ router.put('/approve-vehicle/:vehicleId', [auth, authorize(['ADMIN'])], async (r
     const vehicle = await Vehicle.findByIdAndUpdate(
       vehicleId,
       { isVerified: true },
-<<<<<<< HEAD
-      { new: true } 
-=======
       { new: true }
->>>>>>> origin/Sanzid
     );
     if (!vehicle) {
       return res.status(404).json({ message: 'Vehicle not found' });
@@ -77,9 +57,6 @@ router.put('/approve-vehicle/:vehicleId', [auth, authorize(['ADMIN'])], async (r
     console.error(err.message);
     res.status(500).send('Server Error');
   }
-<<<<<<< HEAD
-=======
-  // (Removed redundant lines)
 });
 
 // --- NEW ROUTES ---
@@ -120,8 +97,6 @@ router.delete('/users/:id', [auth, authorize(['ADMIN'])], async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
-
-// PUT Make Admin (REMOVED)
 
 // 2. Complaints
 router.get('/complaints', [auth, authorize(['ADMIN'])], async (req, res) => {
@@ -185,16 +160,6 @@ router.get('/live-rides', [auth, authorize(['ADMIN'])], async (req, res) => {
 router.put('/reject-vehicle/:vehicleId', [auth, authorize(['ADMIN'])], async (req, res) => {
   try {
     const vehicleId = req.params.vehicleId;
-    // Just delete it or mark as rejected? User asked for "reject button". 
-    // Deleting the vehicle request allows them to re-apply. 
-    // Or we could have a status field. Currently schemas are simple.
-    // Let's delete the vehicle entry so they can start over, 
-    // or we can add a 'rejected' status if schema supported it.
-    // Looking at schema... Vehicle.js wasn't shown but likely has isVerified boolean.
-    // If we just delete it, it's a hard reject. If we set isVerified: false, it's already false.
-    // Best UX: Delete it so it disappears from Pending and user can delete/upload again.
-    // ACTUALLY: Let's just delete it for now as a "Rejection".
-
     await Vehicle.findByIdAndDelete(vehicleId);
     res.json({ message: 'Vehicle application rejected and removed.' });
 
@@ -204,15 +169,10 @@ router.put('/reject-vehicle/:vehicleId', [auth, authorize(['ADMIN'])], async (re
   }
 });
 
-// ... (existing routes) ...
-
 // 5. Create New Admin
 // STRICT: Only Super Admin can do this
 router.post('/create-admin', [auth, authorize(['ADMIN'])], async (req, res) => {
   const { name, username, password } = req.body;
-
-  // SUPER ADMIN CHECK REMOVED
-  // All admins can create other admins
 
   try {
     // Check if username (stored as email) already exists
@@ -240,7 +200,6 @@ router.post('/create-admin', [auth, authorize(['ADMIN'])], async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
->>>>>>> origin/Sanzid
 });
 
 module.exports = router;

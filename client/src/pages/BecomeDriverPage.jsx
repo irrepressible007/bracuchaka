@@ -19,15 +19,6 @@ function BecomeDriverPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-<<<<<<< HEAD
-  const { 
-    bikeName, 
-    bikeModel, 
-    modelYear, 
-    color, 
-    registrationNumber, 
-    licenseNumber 
-=======
   const {
     bikeName,
     bikeModel,
@@ -35,7 +26,6 @@ function BecomeDriverPage() {
     color,
     registrationNumber,
     licenseNumber
->>>>>>> origin/Sanzid
   } = formData;
 
   const handleChange = (e) => {
@@ -52,8 +42,6 @@ function BecomeDriverPage() {
       const apiRes = await axios.post(`${API_URL}/vehicles/register`, formData);
       setSuccess(apiRes.data.message);
       setLoading(false);
-<<<<<<< HEAD
-=======
 
       // Update local storage to reflect new status immediately
       const user = JSON.parse(localStorage.getItem('user'));
@@ -68,7 +56,6 @@ function BecomeDriverPage() {
         window.location.href = '/driver/dashboard';
       }, 1500);
 
->>>>>>> origin/Sanzid
       setFormData({
         bikeName: '', bikeModel: '', modelYear: '', color: '',
         registrationNumber: '', licenseNumber: '',
@@ -85,30 +72,6 @@ function BecomeDriverPage() {
     }
   };
 
-<<<<<<< HEAD
-  // Helper component for form inputs
-  const InputField = ({ label, name, value, onChange, ...props }) => (
-    <div>
-      <label 
-        htmlFor={name} 
-        className="block text-sm font-medium text-gray-700"
-      >
-        {label}
-      </label>
-      <input
-        type="text"
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-        {...props}
-      />
-    </div>
-  );
-
-=======
->>>>>>> origin/Sanzid
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
@@ -117,20 +80,12 @@ function BecomeDriverPage() {
       <p className="mb-6 text-gray-600">
         Submit your vehicle and license details for approval.
       </p>
-<<<<<<< HEAD
-      
-=======
 
->>>>>>> origin/Sanzid
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Messages */}
         {error && <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">{error}</div>}
         {success && <div className="p-3 bg-green-100 border border-green-400 text-green-700 rounded-md">{success}</div>}
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> origin/Sanzid
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InputField label="Bike Name (e.g., Honda)" name="bikeName" value={bikeName} onChange={handleChange} required />
           <InputField label="Bike Model (e.g., Hornet 160R)" name="bikeModel" value={bikeModel} onChange={handleChange} required />
@@ -139,17 +94,10 @@ function BecomeDriverPage() {
           <InputField label="Registration Number" name="registrationNumber" value={registrationNumber} onChange={handleChange} required />
           <InputField label="Driver's License Number" name="licenseNumber" value={licenseNumber} onChange={handleChange} required />
         </div>
-<<<<<<< HEAD
-        
-        <div>
-          <button 
-            type="submit" 
-=======
 
         <div>
           <button
             type="submit"
->>>>>>> origin/Sanzid
             disabled={loading}
             className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
           >
@@ -161,8 +109,6 @@ function BecomeDriverPage() {
   );
 }
 
-<<<<<<< HEAD
-=======
 // Helper component for form inputs
 const InputField = ({ label, name, value, onChange, ...props }) => (
   <div>
@@ -184,5 +130,4 @@ const InputField = ({ label, name, value, onChange, ...props }) => (
   </div>
 );
 
->>>>>>> origin/Sanzid
 export default BecomeDriverPage;

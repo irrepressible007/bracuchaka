@@ -6,6 +6,6 @@ const isProduction = import.meta.env.MODE === 'production';
 
 export const API_URL = isProduction
     ? '/api'
-    : 'http://localhost:5000/api';
+    : 'http://localhost:5001/api';
 
 export default API_URL;

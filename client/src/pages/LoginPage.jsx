@@ -5,29 +5,17 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import setAuthToken from '../utils/setAuthToken';
 
-<<<<<<< HEAD
-const API_URL = 'http://localhost:5000/api'; 
-=======
 import { API_URL } from '../config';
->>>>>>> origin/Sanzid
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-<<<<<<< HEAD
-  const [error, setError] = useState('');
-  
-  const [loginStep, setLoginStep] = useState(1);
-  const [tempData, setTempData] = useState(null); 
-  
-=======
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const [loginStep, setLoginStep] = useState(1);
   const [tempData, setTempData] = useState(null);
 
->>>>>>> origin/Sanzid
   const navigate = useNavigate();
 
   const handleLoginSubmit = async (e) => {
@@ -39,15 +27,6 @@ function LoginPage() {
         email,
         password,
       });
-<<<<<<< HEAD
-      
-      const { token, user } = response.data;
-      setAuthToken(token); 
-      setTempData({ token, user });
-
-      if (user.role === 'ADMIN') {
-        completeLogin('USER', token, user);
-=======
 
       const { token, user } = response.data;
       setAuthToken(token);
@@ -57,18 +36,12 @@ function LoginPage() {
 
       if (user.role === 'ADMIN') {
         completeLogin('PASSENGER', token, user);
->>>>>>> origin/Sanzid
         navigate('/admin/dashboard');
       } else if (user.isRider) {
         setLoginStep(2);
       } else {
-<<<<<<< HEAD
-        completeLogin('USER', token, user);
-        navigate('/dashboard'); 
-=======
         completeLogin('PASSENGER', token, user);
         navigate('/dashboard');
->>>>>>> origin/Sanzid
       }
 
     } catch (err) {
@@ -83,15 +56,6 @@ function LoginPage() {
     localStorage.setItem('activeMode', mode);
   };
 
-<<<<<<< HEAD
-  const handleRoleChoice = (mode) => {
-    const { token, user } = tempData;
-    completeLogin(mode, token, user);
-    
-    if (mode === 'RIDER') {
-      navigate('/rider/dashboard');
-    } else {
-=======
   const handleRoleChoice = async (mode) => {
     const { token, user } = tempData;
 
@@ -124,36 +88,10 @@ function LoginPage() {
     } else {
       // Passenger
       completeLogin(mode, token, user);
->>>>>>> origin/Sanzid
       navigate('/dashboard');
     }
   };
 
-<<<<<<< HEAD
-  return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center"
-        // --- THIS IS THE FIX ---
-        style={{ backgroundImage: "url('/bg.png')" }}
-      >
-        <div className="absolute inset-0 w-full h-full bg-black opacity-40"></div>
-      </div>
-
-      <div className="relative z-10 bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          BRACU-CHAKA
-        </h2>
-
-        {loginStep === 1 && (
-          <>
-            <h3 className="text-xl font-semibold text-center text-gray-600 mb-6">
-              Login to Your Account
-            </h3>
-            <form onSubmit={handleLoginSubmit} className="space-y-6">
-              {error && (
-                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
-=======
   // Wait, I need to fetch status to differentiate "Not Applied" vs "Pending".
   // Let's add a quick axios call inside handleRoleChoice if mode is DRIVER and !isRider
 
@@ -181,16 +119,11 @@ function LoginPage() {
               {error && (
                 <div className="p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg flex items-center">
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
->>>>>>> origin/Sanzid
                   {error}
                 </div>
               )}
               <div>
-<<<<<<< HEAD
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-=======
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
->>>>>>> origin/Sanzid
                   Email Address
                 </label>
                 <input
@@ -199,42 +132,11 @@ function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-<<<<<<< HEAD
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-=======
                   className="input-field"
->>>>>>> origin/Sanzid
                   placeholder="your.name@bracu.ac.bd"
                 />
               </div>
               <div>
-<<<<<<< HEAD
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="••••••••"
-                />
-              </div>
-              <div>
-                <button 
-                  type="submit" 
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Login
-                </button>
-              </div>
-            </form>
-            <p className="mt-6 text-center text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
-=======
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
@@ -278,33 +180,11 @@ function LoginPage() {
             <p className="mt-8 text-center text-sm text-gray-600">
               Don't have an account?{' '}
               <Link to="/register" className="font-semibold text-brand-600 hover:text-brand-700 transition-colors">
->>>>>>> origin/Sanzid
                 Register here
               </Link>
             </p>
           </>
         )}
-<<<<<<< HEAD
-        
-        {loginStep === 2 && (
-          <div>
-            <h3 className="text-xl font-semibold text-center text-gray-600 mb-6">
-              Welcome back, {tempData.user.name}!
-            </h3>
-            <p className="text-center text-gray-600 mb-6">How would you like to log in?</p>
-            <div className="space-y-4">
-              <button 
-                onClick={() => handleRoleChoice('USER')}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Login as User (Find Rides)
-              </button>
-              <button 
-                onClick={() => handleRoleChoice('RIDER')}
-                className="w-full flex justify-center py-3 px-4 border border-blue-600 rounded-md shadow-sm text-sm font-medium text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Login as Rider (Offer Rides)
-=======
 
         {loginStep === 2 && (
           <div className="animate-fade-in">
@@ -324,7 +204,6 @@ function LoginPage() {
                 className="w-full btn-outline flex items-center justify-center space-x-2 bg-white"
               >
                 <span>Offer a Ride</span>
->>>>>>> origin/Sanzid
               </button>
             </div>
           </div>

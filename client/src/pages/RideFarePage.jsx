@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export default function RideFarePage() {
   const { state } = useLocation();
@@ -60,7 +61,7 @@ export default function RideFarePage() {
       }
 
       await axios.post(
-        'http://localhost:5000/api/rides/request',
+        `${API_URL}/rides/request`,
         {
           startLocation,
           destination,

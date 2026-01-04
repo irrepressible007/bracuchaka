@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { auth, authorize } = require('../middleware/auth'); 
+const { auth, authorize } = require('../middleware/auth');
 
 // @route   GET /api/profile/me
 // @desc    Get the current logged-in user's profile
@@ -27,7 +27,7 @@ router.get('/me', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => {
 router.put('/update', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => {
   // Get all fields from the request body
   // --- REMOVED 'profilePhotoUrl' ---
-  const { name, department, year, bio } = req.body;
+  const { name, department, year, bio, phone } = req.body;
 
   // Build the profile object with only the fields that were sent
   const profileFields = {};
@@ -35,6 +35,7 @@ router.put('/update', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => 
   if (department) profileFields.department = department;
   if (year) profileFields.year = year;
   if (bio) profileFields.bio = bio;
+  if (phone) profileFields.phone = phone;
   // --- REMOVED 'profilePhotoUrl' ---
 
   try {

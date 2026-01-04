@@ -13,11 +13,10 @@ const { auth, authorize } = require('../middleware/auth');
 // @access  Private (USER only)
 router.post('/', [auth, authorize(['USER'])], async (req, res) => {
     try {
-<<<<<<< HEAD
         const { bookingId, rideRequestId, rating, comment } = req.body;
         const reviewerId = req.user.id;
         let driverId = null;
-        let rideId = null;
+        let rideId = null; // Can be Ride (scheduled) or null (instant)
 
         if (bookingId) {
             // 1. Verify Booking exists
@@ -75,42 +74,6 @@ router.post('/', [auth, authorize(['USER'])], async (req, res) => {
             reviewer: reviewerId,
             driver: driverId,
             ride: rideId || undefined,
-=======
-        const { bookingId, rating, comment } = req.body;
-        const reviewerId = req.user.id;
-
-        // 1. Verify Booking exists
-        const booking = await Booking.findById(bookingId).populate('ride');
-        if (!booking) {
-            return res.status(404).json({ message: 'Booking not found' });
-        }
-
-        // 2. Verify Booking belongs to User
-        if (booking.user.toString() !== reviewerId) {
-            return res.status(403).json({ message: 'Not authorized to review this booking' });
-        }
-
-        // 3. Verify Ride is Completed (Optional: or departure time is in the past)
-        // For now, we'll allow reviewing if the ride status is COMPLETED or if departureTime is in the past
-        // const isPast = new Date(booking.ride.departureTime) < new Date();
-        // if (booking.ride.status !== 'COMPLETED' && !isPast) {
-        //   return res.status(400).json({ message: 'Cannot review a ride that hasn\'t happened yet' });
-        // }
-
-        // 4. Check if already reviewed (Schema handles this, but good to check)
-        const existingReview = await Review.findOne({ booking: bookingId, reviewer: reviewerId });
-        if (existingReview) {
-            return res.status(400).json({ message: 'You have already reviewed this ride' });
-        }
-
-        const driverId = booking.ride.driver;
-
-        const newReview = new Review({
-            booking: bookingId,
-            reviewer: reviewerId,
-            driver: driverId,
-            ride: booking.ride._id,
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
             rating: Number(rating),
             comment
         });
@@ -142,7 +105,7 @@ router.get('/driver/:driverId', async (req, res) => {
     try {
         const reviews = await Review.find({ driver: req.params.driverId })
             .populate('reviewer', 'name profilePhotoUrl')
-            .populate('ride', 'departureLocation destination departureTime')
+            // .populate('ride', 'departureLocation destination departureTime') // Might file if ride is null
             .sort({ createdAt: -1 });
 
         res.json(reviews);

@@ -1,10 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
-=======
 import { API_URL } from '../config';
->>>>>>> origin/Sanzid
 
 const MyRideRequests = () => {
     const [myRequests, setMyRequests] = useState([]);
@@ -18,11 +15,7 @@ const MyRideRequests = () => {
     const fetchMyRequests = async () => {
         try {
             const token = localStorage.getItem('token');
-<<<<<<< HEAD
-            const response = await axios.get('http://localhost:5000/api/rides/requests/my', {
-=======
             const response = await axios.get(`${API_URL}/rides/requests/my`, {
->>>>>>> origin/Sanzid
                 headers: { 'x-auth-token': token }
             });
             setMyRequests(response.data);
@@ -45,11 +38,7 @@ const MyRideRequests = () => {
             const token = localStorage.getItem('token');
             console.log('Token found:', !!token);
 
-<<<<<<< HEAD
-            const url = `http://localhost:5000/api/rides/request/${id}/cancel`;
-=======
             const url = `${API_URL}/rides/request/${id}/cancel`;
->>>>>>> origin/Sanzid
             console.log('Sending PUT to:', url);
 
             const response = await axios.put(url, {}, {

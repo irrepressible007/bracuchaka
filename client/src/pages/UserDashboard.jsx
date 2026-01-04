@@ -299,6 +299,10 @@ function UserDashboard() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">{activeRide.driver?.name || 'Driver'}</h2>
+                  {activeRide.driver?.phone && (
+                    <p className="text-blue-600 font-medium text-sm mt-0.5">{activeRide.driver.phone}</p>
+                  )}
+
                   <div className="flex items-center text-sm text-gray-500 mt-1">
                     <span className="font-semibold text-gray-700 mr-2">{activeRide.vehicle?.bikeName}</span>
                     <span className="bg-gray-100 px-2 py-0.5 rounded text-xs">{activeRide.vehicle?.plateNumber}</span>

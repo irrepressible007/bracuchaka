@@ -1,16 +1,8 @@
-<<<<<<< HEAD
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReviewModal from '../components/ReviewModal';
 import ReportModal from '../components/ReportModal';
-=======
-// client/src/pages/MyRidesPage.jsx
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ReviewModal from '../components/ReviewModal';
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
-
 import { API_URL } from '../config';
 
 const MyRidesPage = () => {
@@ -21,21 +13,17 @@ const MyRidesPage = () => {
     // State for Review Modal
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBooking, setSelectedBooking] = useState(null);
-<<<<<<< HEAD
 
     // State for Report Modal
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [reportBooking, setReportBooking] = useState(null);
 
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     const [toastMessage, setToastMessage] = useState('');
 
     const fetchBookings = async () => {
         try {
             setLoading(true);
             const token = localStorage.getItem('token');
-<<<<<<< HEAD
 
             // Fetch Shared Ride Bookings
             const bookingsRes = await axios.get(`${API_URL}/bookings/my`, {
@@ -83,15 +71,6 @@ const MyRidesPage = () => {
         } catch (err) {
             console.error(err);
             setError('Failed to load your rides.');
-=======
-            const res = await axios.get(`${API_URL}/bookings/my`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            setBookings(res.data);
-        } catch (err) {
-            console.error(err);
-            setError('Failed to load your bookings.');
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
         } finally {
             setLoading(false);
         }
@@ -101,22 +80,18 @@ const MyRidesPage = () => {
         fetchBookings();
     }, []);
 
-<<<<<<< HEAD
     const showToast = (msg) => {
         setToastMessage(msg);
         setTimeout(() => setToastMessage(''), 3000);
     };
 
     // Review Handlers
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     const handleOpenReview = (booking) => {
         setSelectedBooking(booking);
         setIsModalOpen(true);
     };
 
     const handleReviewSuccess = () => {
-<<<<<<< HEAD
         showToast('Review submitted successfully!');
         fetchBookings();
     };
@@ -149,11 +124,6 @@ const MyRidesPage = () => {
             console.error(err);
             showToast(err.response?.data?.message || 'Failed to block user');
         }
-=======
-        setToastMessage('Review submitted successfully!');
-        setTimeout(() => setToastMessage(''), 3000); // Clear after 3s
-        fetchBookings(); // Refresh list potentially (though not strictly needed unless we shadow the button)
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
     };
 
     return (
@@ -167,13 +137,8 @@ const MyRidesPage = () => {
 
             {/* Toast Notification */}
             {toastMessage && (
-<<<<<<< HEAD
                 <div className="fixed top-24 right-5 animate-slide-up z-50 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-lg font-medium flex items-center">
                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-=======
-                <div className="fixed top-24 right-5 animate-slide-up z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-medium flex items-center">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                     {toastMessage}
                 </div>
             )}
@@ -201,23 +166,12 @@ const MyRidesPage = () => {
             )}
 
             <div className="space-y-4">
-<<<<<<< HEAD
                 {bookings.map((item) => {
                     const departureDate = item.date;
                     const isCompleted = item.canReview;
 
                     return (
                         <div key={item._id} className="bg-white rounded-xl shadow-sm border border-surface-200 p-6 flex flex-col md:flex-row items-center transition-all hover:shadow-md">
-=======
-                {bookings.map((booking) => {
-                    const departureDate = new Date(booking.ride.departureTime);
-                    // Check if ride is past/completed to allow rating.
-                    // Simplified logic: if status is COMPLETED or date is past
-                    const isCompleted = booking.ride.status === 'COMPLETED' || departureDate < new Date();
-
-                    return (
-                        <div key={booking._id} className="bg-white rounded-xl shadow-sm border border-surface-200 p-6 flex flex-col md:flex-row items-center transition-all hover:shadow-md">
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
                             {/* Date Block */}
                             <div className="flex flex-col items-center justify-center bg-surface-50 p-4 rounded-lg min-w-[100px] mb-4 md:mb-0 md:mr-6">
@@ -236,7 +190,6 @@ const MyRidesPage = () => {
                             <div className="flex-1 text-center md:text-left w-full">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-2">
                                     <h3 className="text-lg font-bold text-gray-900 font-heading">
-<<<<<<< HEAD
                                         {item.displayDestination}
                                     </h3>
                                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold mt-2 md:mt-0 w-fit mx-auto md:mx-0 ${item.status === 'CONFIRMED' || item.status === 'completed' || item.status === 'accepted' ? 'bg-green-100 text-green-700' :
@@ -244,19 +197,11 @@ const MyRidesPage = () => {
                                             'bg-yellow-100 text-yellow-700'
                                         }`}>
                                         {item.status}
-=======
-                                        {booking.ride.destination}
-                                    </h3>
-                                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold mt-2 md:mt-0 w-fit mx-auto md:mx-0 ${booking.status === 'CONFIRMED' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                                        }`}>
-                                        {booking.status}
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                                     </span>
                                 </div>
                                 <div className="text-gray-500 text-sm space-y-1">
                                     <p className="flex items-center justify-center md:justify-start">
                                         <span className="w-1.5 h-1.5 rounded-full bg-brand-400 mr-2"></span>
-<<<<<<< HEAD
                                         From: {item.displayStart}
                                     </p>
                                     <p className="flex items-center justify-center md:justify-start">
@@ -286,14 +231,6 @@ const MyRidesPage = () => {
                                             </button>
                                         </div>
                                     )}
-=======
-                                        From: {booking.ride.departureLocation}
-                                    </p>
-                                    <p className="flex items-center justify-center md:justify-start">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-surface-400 mr-2"></span>
-                                        Driver: <span className="font-semibold text-gray-700 ml-1">{booking.ride.driver.name}</span>
-                                    </p>
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                                 </div>
                             </div>
 
@@ -301,11 +238,7 @@ const MyRidesPage = () => {
                             <div className="mt-6 md:mt-0 md:ml-6 flex items-center">
                                 {isCompleted && (
                                     <button
-<<<<<<< HEAD
                                         onClick={() => handleOpenReview(item)}
-=======
-                                        onClick={() => handleOpenReview(booking)}
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                                         className="btn-outline px-6 py-2 text-sm border-brand-200 hover:bg-brand-50 hover:border-brand-300 text-brand-700"
                                     >
                                         <div className="flex items-center">
@@ -314,15 +247,9 @@ const MyRidesPage = () => {
                                         </div>
                                     </button>
                                 )}
-<<<<<<< HEAD
                                 {!isCompleted && item.status !== 'cancelled' && item.status !== 'rejected' && (
                                     <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1 rounded-md">
                                         Upcoming / Active
-=======
-                                {!isCompleted && (
-                                    <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-3 py-1 rounded-md">
-                                        Upcoming
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                                     </span>
                                 )}
                             </div>
@@ -331,11 +258,7 @@ const MyRidesPage = () => {
                 })}
             </div>
 
-<<<<<<< HEAD
             {/* Reusable Modal for Reviews */}
-=======
-            {/* Reusable Modal */}
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
             {selectedBooking && (
                 <ReviewModal
                     isOpen={isModalOpen}
@@ -344,7 +267,6 @@ const MyRidesPage = () => {
                     onSuccess={handleReviewSuccess}
                 />
             )}
-<<<<<<< HEAD
 
             {/* Reusable Modal for Reporting */}
             {reportBooking && (
@@ -356,8 +278,6 @@ const MyRidesPage = () => {
                     onSuccess={handleReportSuccess}
                 />
             )}
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
         </div>
     );
 };

@@ -9,7 +9,7 @@ const router = express.Router();
 
 // --- REGISTRATION ROUTE ---
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, phone } = req.body;
 
   try {
     // 1. Check for missing fields
@@ -34,6 +34,7 @@ router.post('/register', async (req, res) => {
       name,
       email,
       password,
+      phone: phone || "" // Save phone if provided
     });
 
     // 5. Hash the password
@@ -58,16 +59,13 @@ router.post('/register', async (req, res) => {
       { expiresIn: '7d' },
       (err, token) => {
         if (err) throw err;
-<<<<<<< HEAD
-        res.status(201).json({ 
-=======
         res.status(201).json({
->>>>>>> origin/Sanzid
           token,
           user: {
             id: user.id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             role: user.role,
             isRider: user.isRider,
           }
@@ -76,12 +74,7 @@ router.post('/register', async (req, res) => {
     );
 
   } catch (err) {
-    // This is the error we need to see
-<<<<<<< HEAD
-    console.error('REGISTRATION ERROR:', err.message); 
-=======
     console.error('REGISTRATION ERROR:', err.message);
->>>>>>> origin/Sanzid
     if (err.name === 'ValidationError') {
       return res.status(400).json({ message: err.message });
     }
@@ -118,17 +111,13 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' },
       (err, token) => {
         if (err) throw err;
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> origin/Sanzid
         res.json({
           token,
           user: {
             id: user.id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             role: user.role,
             isRider: user.isRider,
           }
@@ -141,8 +130,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-=======
 // --- EMERGENCY SETUP ROUTE (TEMP) ---
 router.get('/emergency-setup', async (req, res) => {
   try {
@@ -172,5 +159,4 @@ router.get('/emergency-setup', async (req, res) => {
   }
 });
 
->>>>>>> origin/Sanzid
 module.exports = router;

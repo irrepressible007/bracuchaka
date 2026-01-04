@@ -18,6 +18,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Password is required'],
   },
+  // --- NEW: Phone Number ---
+  phone: {
+    type: String,
+    trim: true,
+    default: ""
+  },
   role: {
     type: String,
     enum: ['USER', 'ADMIN'],
@@ -27,8 +33,6 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-<<<<<<< HEAD
-=======
   isBlocked: {
     type: Boolean,
     default: false
@@ -65,16 +69,12 @@ const UserSchema = new mongoose.Schema({
     default: 0,
   },
   // --- END OF RATING SYSTEM FIELDS ---
-<<<<<<< HEAD
-  
+
   blockedUsers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
->>>>>>> origin/Sanzid
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);

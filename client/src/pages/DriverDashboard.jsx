@@ -1,15 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
 import io from "socket.io-client";
 
 import { API_URL } from '../config';
 import Chat from './Chat';
-=======
-
-import { API_URL } from '../config';
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
 const DriverDashboard = () => {
     const [requests, setRequests] = useState([]);
@@ -26,8 +21,6 @@ const DriverDashboard = () => {
                 checkRideStatus();
             }
         }, 5000);
-        return () => clearInterval(intervalId);
-<<<<<<< HEAD
         return () => clearInterval(intervalId);
     }, [activeRide?._id]);
 
@@ -53,9 +46,9 @@ const DriverDashboard = () => {
                     setActiveRide(updatedRide);
                 }
             });
+        }
 
-            return () => socket.disconnect();
-        }// Listen for NEW requests (Global event for now)
+        // Listen for NEW requests (Global event for now)
         socket.on('new_ride_request', (newRequest) => {
             console.log('New ride request received:', newRequest);
             // Only add if not already in list
@@ -67,9 +60,6 @@ const DriverDashboard = () => {
 
         return () => socket.disconnect();
     }, [activeRide?._id]);
-=======
-    }, [activeRide?._id]); // Add dependency on ID to restart polling if ride changes
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
     const fetchInitialData = async () => {
         try {
@@ -196,6 +186,7 @@ const DriverDashboard = () => {
                             <div>
                                 <h3 className="text-gray-500 text-sm uppercase tracking-wide font-semibold mb-1">Passenger</h3>
                                 <p className="text-2xl font-bold text-gray-800">{activeRide.requester?.name || 'Unknown'}</p>
+                                {/* Phone Number Display - ALREADY WAS HERE IN HEAD */}
                                 {activeRide.requester?.phone && <p className="text-blue-600 font-medium mt-1">{activeRide.requester.phone}</p>}
                             </div>
                             <div className="bg-gray-50 p-4 rounded-lg">
@@ -289,14 +280,11 @@ const DriverDashboard = () => {
                                 {activeRide.driverEnded ? 'Waiting for Passenger...' : 'End Ride'}
                             </button>
                         )}
-<<<<<<< HEAD
 
                         {/* --- Chat Component --- */}
                         <div className="mt-8 h-96">
                             <Chat rideId={activeRide._id} role="driver" />
                         </div>
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
                     </div>
                 </div>
             </div>

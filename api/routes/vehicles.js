@@ -11,15 +11,6 @@ const { auth } = require('../middleware/auth');
 // @access  Private
 
 router.post('/register', auth, async (req, res) => {
-<<<<<<< HEAD
-  const { 
-    bikeName, 
-    bikeModel, 
-    modelYear, 
-    color, 
-    registrationNumber, 
-    licenseNumber 
-=======
   const {
     bikeName,
     bikeModel,
@@ -27,7 +18,6 @@ router.post('/register', auth, async (req, res) => {
     color,
     registrationNumber,
     licenseNumber
->>>>>>> origin/Sanzid
   } = req.body;
 
   // Basic validation
@@ -47,11 +37,7 @@ router.post('/register', auth, async (req, res) => {
     if (vehicle) {
       return res.status(400).json({ message: 'This registration number is already registered.' });
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> origin/Sanzid
     // Check if license number is already taken
     vehicle = await Vehicle.findOne({ licenseNumber });
     if (vehicle) {
@@ -77,13 +63,6 @@ router.post('/register', auth, async (req, res) => {
 
     await vehicle.save();
 
-<<<<<<< HEAD
-=======
-    // Automatically promote user to rider for now (or pending approval if desired)
-    // We DO NOT auto-promote to rider anymore. Admin must approve.
-    // await User.findByIdAndUpdate(req.user.id, { isRider: true });
-
->>>>>>> origin/Sanzid
     res.status(201).json({ message: 'Vehicle submitted for approval.', vehicle });
 
   } catch (err) {
@@ -98,11 +77,7 @@ function findBikeImage(name, model, year, color) {
   console.log(`Searching for image: ${name} ${model} ${year} ${color}`);
   // In a real app, this would query a database.
   // For now, it just returns a default placeholder.
-<<<<<<< HEAD
-  return '/images/default-bike-placeholder.png'; 
-=======
   return '/images/default-bike-placeholder.png';
->>>>>>> origin/Sanzid
 }
 
 module.exports = router;

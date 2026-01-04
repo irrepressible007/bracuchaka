@@ -4,17 +4,10 @@ const { auth } = require('../middleware/auth');
 const Complaint = require('../models/Complaint');
 
 // @route   POST api/support
-<<<<<<< HEAD
 // @desc    Submit a support ticket or report a user
 // @access  Private
 router.post('/', auth, async (req, res) => {
     const { description, reportedUserId, rideId } = req.body;
-=======
-// @desc    Submit a support ticket
-// @access  Private
-router.post('/', auth, async (req, res) => {
-    const { description } = req.body;
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 
     if (!description) {
         return res.status(400).json({ message: 'Description is required' });
@@ -24,18 +17,12 @@ router.post('/', auth, async (req, res) => {
         const newTicket = new Complaint({
             submittedBy: req.user.id,
             description: description,
-<<<<<<< HEAD
             status: 'pending',
         });
 
         if (reportedUserId) newTicket.reportedUser = reportedUserId;
         if (rideId) newTicket.ride = rideId;
 
-=======
-            status: 'pending', // Default status
-        });
-
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
         const ticket = await newTicket.save();
 
         res.json(ticket);
@@ -45,7 +32,6 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 // @route   POST api/support/block
 // @desc    Block a user
 // @access  Private
@@ -101,6 +87,4 @@ router.post('/unblock', auth, async (req, res) => {
     }
 });
 
-=======
->>>>>>> 95c9c18c5c3bc5a1d8b70e1427ea909619b2bfbf
 module.exports = router;

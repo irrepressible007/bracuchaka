@@ -9,6 +9,7 @@ function ProfilePage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '', // Added Phone
     department: '',
     year: '',
     bio: '',
@@ -27,6 +28,7 @@ function ProfilePage() {
         setFormData({
           name: res.data.name || '',
           email: res.data.email || '',
+          phone: res.data.phone || '', // Fetch Phone
           department: res.data.department || '',
           year: res.data.year || '',
           bio: res.data.bio || '',
@@ -43,23 +45,22 @@ function ProfilePage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 2. Handle the form submission (simplified)
+  // 2. Handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccess('');
 
-    // We only send the text data, not a photo URL
     const updatedProfileData = {
       name: formData.name,
+      phone: formData.phone, // Submit Phone
       department: formData.department,
       year: formData.year,
       bio: formData.bio,
     };
 
     try {
-      // 3. Send ALL text data to our backend
       const res = await axios.put(`${API_URL}/profile/update`, updatedProfileData);
 
       setSuccess(res.data.message);
@@ -123,6 +124,11 @@ function ProfilePage() {
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
               <input type="email" name="email" value={formData.email} disabled className="input-field bg-gray-100 text-gray-500 cursor-not-allowed" />
             </div>
+            {/* New Phone Field */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
+              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="01XXXXXXXXX" className="input-field" />
+            </div>
             <div>
               <label htmlFor="department" className="block text-sm font-semibold text-gray-700 mb-1">Department</label>
               <input type="text" name="department" value={formData.department} onChange={handleChange} placeholder="e.g., CSE" className="input-field" />
@@ -158,9 +164,6 @@ function ProfilePage() {
           </div>
         </form>
       </div>
-
-
-
     </div>
   );
 }

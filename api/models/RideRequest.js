@@ -18,11 +18,7 @@ const RideRequestSchema = new Schema({
   },
   status: {
     type: String,
-<<<<<<< HEAD
-    enum: ['pending', 'accepted', 'completed', 'cancelled'],
-=======
     enum: ['pending', 'accepted', 'in_progress', 'completed', 'cancelled', 'rejected'],
->>>>>>> origin/Sanzid
     default: 'pending',
   },
   driver: {
@@ -30,8 +26,6 @@ const RideRequestSchema = new Schema({
     ref: 'User',
     default: null,
   },
-<<<<<<< HEAD
-=======
   // --- New Fields for Ride Flow ---
   vehicle: {
     type: Schema.Types.ObjectId,
@@ -58,7 +52,6 @@ const RideRequestSchema = new Schema({
     type: Boolean,
     default: false
   }
->>>>>>> origin/Sanzid
 }, { timestamps: true });
 
 module.exports = mongoose.model('RideRequest', RideRequestSchema);

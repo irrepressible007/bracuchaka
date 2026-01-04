@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// client/tailwind.config.js
-
-=======
->>>>>>> origin/Sanzid
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -10,9 +5,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-<<<<<<< HEAD
-    extend: {},
-=======
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -65,7 +57,6 @@ export default {
         }
       }
     },
->>>>>>> origin/Sanzid
   },
   plugins: [],
 }

@@ -5,13 +5,6 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const ProtectedRoute = ({ allowedRoles, allowedModes }) => {
   const token = localStorage.getItem('token');
-<<<<<<< HEAD
-  const user = JSON.parse(localStorage.getItem('user'));
-  const activeMode = localStorage.getItem('activeMode');
-
-  // 1. Check for a token
-  if (!token) {
-=======
   let user = null;
   try {
     user = JSON.parse(localStorage.getItem('user'));
@@ -37,7 +30,6 @@ const ProtectedRoute = ({ allowedRoles, allowedModes }) => {
     if (window.location.pathname.startsWith('/admin')) {
       return <Navigate to="/admin/login" replace />;
     }
->>>>>>> origin/Sanzid
     return <Navigate to="/login" replace />;
   }
 
@@ -47,9 +39,6 @@ const ProtectedRoute = ({ allowedRoles, allowedModes }) => {
     return <Navigate to="/" replace />; // Go to home redirect
   }
 
-<<<<<<< HEAD
-  // 3. Check for active mode (USER or RIDER)
-=======
   // 3. Security: STRICT Admin Check
   const isAdminPath = window.location.pathname.startsWith('/admin');
   if (isAdminPath && user.role !== 'ADMIN') {
@@ -58,7 +47,6 @@ const ProtectedRoute = ({ allowedRoles, allowedModes }) => {
   }
 
   // 4. Check for active mode (USER or RIDER)
->>>>>>> origin/Sanzid
   if (allowedModes && !allowedModes.includes(activeMode)) {
     // If active mode (e.g., RIDER) is not allowed, kick them out
     return <Navigate to="/" replace />; // Go to home redirect
