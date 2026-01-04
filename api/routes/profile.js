@@ -24,9 +24,15 @@ router.get('/me', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => {
 // @route   PUT /api/profile/update
 // @desc    Update the current logged-in user's profile
 // @access  Private (USER and ADMIN)
-router.put('/update', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => {
+// @route   PUT /api/profile/update
+// @desc    Update the current logged-in user's profile
+// @access  Private (USER and ADMIN)
+const upload = require('../middleware/upload');
+const cloudinary = require('../utils/cloudinary');
+const fs = require('fs');
+
+router.put('/update', [auth, authorize(['USER', 'ADMIN']), upload.single('profilePhoto')], async (req, res) => {
   // Get all fields from the request body
-  // --- REMOVED 'profilePhotoUrl' ---
   const { name, department, year, bio, phone } = req.body;
 
   // Build the profile object with only the fields that were sent
@@ -36,12 +42,30 @@ router.put('/update', [auth, authorize(['USER', 'ADMIN'])], async (req, res) => 
   if (year) profileFields.year = year;
   if (bio) profileFields.bio = bio;
   if (phone) profileFields.phone = phone;
-  // --- REMOVED 'profilePhotoUrl' ---
 
   try {
     let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Handle File Upload
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "bracu-chaka/profiles",
+          width: 300,
+          crop: "scale"
+        });
+        profileFields.profilePhotoUrl = result.secure_url;
+
+        // Delete local file
+        fs.unlinkSync(req.file.path);
+      } catch (uploadErr) {
+        console.error("Cloudinary Upload Error:", uploadErr);
+        // Don't fail the whole request, but maybe warn?
+        // return res.status(500).json({ message: 'Image upload failed' });
+      }
     }
 
     // Update the user

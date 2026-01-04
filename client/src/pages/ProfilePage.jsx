@@ -45,6 +45,13 @@ function ProfilePage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
+  const [photoFile, setPhotoFile] = useState(null);
+
+  const handlePhotoChange = (e) => {
+    setPhotoFile(e.target.files[0]);
+  };
+
   // 2. Handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,22 +59,33 @@ function ProfilePage() {
     setError('');
     setSuccess('');
 
-    const updatedProfileData = {
-      name: formData.name,
-      phone: formData.phone, // Submit Phone
-      department: formData.department,
-      year: formData.year,
-      bio: formData.bio,
-    };
+    // Use FormData for file upload
+    const formDataObj = new FormData();
+    formDataObj.append('name', formData.name);
+    if (formData.phone) formDataObj.append('phone', formData.phone);
+    if (formData.department) formDataObj.append('department', formData.department);
+    if (formData.year) formDataObj.append('year', formData.year);
+    if (formData.bio) formDataObj.append('bio', formData.bio);
+    if (photoFile) {
+      formDataObj.append('profilePhoto', photoFile);
+    }
 
     try {
-      const res = await axios.put(`${API_URL}/profile/update`, updatedProfileData);
+      // Content-Type multipart/form-data is set automatically by browser/axios when data is FormData
+      const res = await axios.put(`${API_URL}/profile/update`, formDataObj, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
 
       setSuccess(res.data.message);
       // Update local storage user 'name' if it changed
       const localUser = JSON.parse(localStorage.getItem('user'));
       localUser.name = res.data.user.name;
+      // Also update photo in local storage if needed? Usually only name/role are stored.
       localStorage.setItem('user', JSON.stringify(localUser));
+
+      // Update state to reflect new photo immediately
+      setFormData(prev => ({ ...prev, profilePhotoUrl: res.data.user.profilePhotoUrl }));
+      setPhotoFile(null); // Clear selection
 
     } catch (err) {
       if (err.response && err.response.data) {
@@ -94,23 +112,29 @@ function ProfilePage() {
           {error && <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg">{error}</div>}
           {success && <div className="p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-lg">{success}</div>}
 
-          {/* Profile Photo Section (Static) */}
+          {/* Profile Photo Section (Interactive) */}
           <div className="flex items-center space-x-6 pb-6 border-b border-gray-100">
-            <div className="relative">
-              <div className="absolute inset-0 bg-brand-600 rounded-full blur opacity-20"></div>
+            <div className="relative group cursor-pointer">
+              <div className="absolute inset-0 bg-brand-600 rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
               <img
-                src={formData.profilePhotoUrl}
+                src={photoFile ? URL.createObjectURL(photoFile) : formData.profilePhotoUrl}
                 alt="Profile"
                 className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md relative z-10"
                 onError={(e) => { e.target.onerror = null; e.target.src = "/2.png"; }}
               />
+              <label className="absolute bottom-0 right-0 bg-white rounded-full p-1.5 shadow-md cursor-pointer z-20 hover:scale-110 transition-transform">
+                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+              </label>
             </div>
             <div>
               <label className="block text-lg font-bold text-gray-800">
                 {formData.name || 'User'}
               </label>
               <p className="text-sm text-gray-500">BRACU Student / Faculty</p>
-              <p className="text-xs text-brand-500 mt-1 font-medium bg-brand-50 inline-block px-2 py-1 rounded">Profile Photo updates disabled</p>
+              <p className="text-xs text-brand-500 mt-1 font-medium bg-brand-50 inline-block px-2 py-1 rounded">
+                {photoFile ? <span className='text-green-600'>New photo selected</span> : 'Click icon to change photo'}
+              </p>
             </div>
           </div>
 

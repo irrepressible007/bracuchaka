@@ -126,6 +126,21 @@ const MyRidesPage = () => {
         }
     };
 
+    // Tab State
+    const [activeTab, setActiveTab] = useState('upcoming');
+
+    // Filter Logic
+    const filteredBookings = bookings.filter(ride => {
+        const isPast = new Date(ride.date) < new Date();
+        const isCompletedOrCancelled = ['completed', 'cancelled', 'rejected', 'COMPLETED', 'CANCELLED'].includes(ride.status);
+
+        if (activeTab === 'upcoming') {
+            return !isPast && !isCompletedOrCancelled;
+        } else {
+            return isPast || isCompletedOrCancelled;
+        }
+    });
+
     return (
         <div className="max-w-7xl mx-auto animate-fade-in pb-12">
             <div className="mb-8 border-b border-gray-100 pb-4">
@@ -134,6 +149,29 @@ const MyRidesPage = () => {
                 </h1>
                 <p className="text-gray-500 mt-1">View your booking history and rate your rides.</p>
             </div>
+
+            {/* Tab Navigation */}
+            <div className="flex space-x-1 mb-6 bg-surface-100 p-1 rounded-xl w-fit">
+                <button
+                    onClick={() => setActiveTab('upcoming')}
+                    className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'upcoming'
+                            ? 'bg-white text-brand-600 shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700 hover:bg-white/50'
+                        }`}
+                >
+                    Upcoming
+                </button>
+                <button
+                    onClick={() => setActiveTab('history')}
+                    className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'history'
+                            ? 'bg-white text-brand-600 shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700 hover:bg-white/50'
+                        }`}
+                >
+                    History
+                </button>
+            </div>
+
 
             {/* Toast Notification */}
             {toastMessage && (
@@ -155,18 +193,20 @@ const MyRidesPage = () => {
                 </div>
             )}
 
-            {!loading && bookings.length === 0 && (
+            {!loading && filteredBookings.length === 0 && (
                 <div className="text-center py-24 bg-white rounded-xl border border-dashed border-gray-300">
                     <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-50 mb-4">
                         <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
-                    <p className="text-xl font-bold text-gray-900">No rides yet</p>
-                    <p className="text-gray-500 mt-2">Book a ride to start your journey!</p>
+                    <p className="text-xl font-bold text-gray-900">No {activeTab} rides found</p>
+                    <p className="text-gray-500 mt-2">
+                        {activeTab === 'upcoming' ? "Book a ride to see it here!" : "Your completion history will appear here."}
+                    </p>
                 </div>
             )}
 
             <div className="space-y-4">
-                {bookings.map((item) => {
+                {filteredBookings.map((item) => {
                     const departureDate = item.date;
                     const isCompleted = item.canReview;
 

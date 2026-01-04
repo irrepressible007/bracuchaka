@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 5000;
 
 // --- Middleware ---
 app.use(cors({
-  origin: '*'
+  origin: '*', // TODO: In production, replace '*' with your actual client domain (e.g., https://bracu-chaka.vercel.app)
+  methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 app.use(express.json());
 
@@ -20,7 +21,6 @@ let isConnected = false; // Track connection state
 const connectDB = async () => {
   mongoose.set('strictQuery', true);
   if (isConnected) {
-    console.log('MongoDB using existing connection');
     return;
   }
   try {
@@ -36,7 +36,7 @@ const connectDB = async () => {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Allow all origins (update for production!)
+    origin: "*", // TODO: Update for production security
     methods: ["GET", "POST"]
   }
 });

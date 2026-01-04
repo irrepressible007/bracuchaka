@@ -131,32 +131,6 @@ router.post('/login', async (req, res) => {
 });
 
 // --- EMERGENCY SETUP ROUTE (TEMP) ---
-router.get('/emergency-setup', async (req, res) => {
-  try {
-    const email = 'admin@bracu-chaka';
-    const password = 'admin1234@';
 
-    // 1. Delete existing to start fresh
-    await User.deleteOne({ email });
-
-    // 2. Create Fresh
-    const user = new User({
-      name: 'Super Admin',
-      email,
-      password, // Pre-hash below
-      role: 'ADMIN',
-      isRider: false
-    });
-
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-
-    res.json({ msg: 'ADMIN FIXED', email, password_hash: user.password });
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
 
 module.exports = router;

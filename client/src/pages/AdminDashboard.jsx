@@ -161,10 +161,15 @@ function AdminDashboard() {
     navigate('/');
   }
 
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // ... (existing fetch functions remain same)
+
   // --- RENDER HELPERS ---
   const SidebarItem = ({ id, icon, label }) => (
     <button
-      onClick={() => setActiveTab(id)}
+      onClick={() => { setActiveTab(id); setIsSidebarOpen(false); }}
       className={`w-full flex items-center px-6 py-4 text-left font-medium transition-all duration-200 border-l-4
       ${activeTab === id
           ? 'bg-gray-800 text-white border-blue-500 shadow-inner'
@@ -177,9 +182,18 @@ function AdminDashboard() {
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden font-sans">
+
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden backdrop-blur-sm"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 text-white shadow-2xl flex flex-col z-20 font-inter">
-        <div className="px-6 py-8 border-b border-gray-800 bg-gray-900">
+      <div className={`fixed inset-y-0 left-0 w-64 bg-gray-900 text-white shadow-2xl flex flex-col z-40 transform transition-transform duration-300 lg:static lg:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="px-6 py-8 border-b border-gray-800 bg-gray-900 flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
               <span className="font-bold text-white text-lg">C</span>
@@ -189,9 +203,12 @@ function AdminDashboard() {
               <p className="text-[10px] text-gray-500 uppercase tracking-[0.2em] mt-1">Admin Panel</p>
             </div>
           </div>
+          <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-400">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
         </div>
 
-        <nav className="flex-1 py-6 space-y-1">
+        <nav className="flex-1 py-6 space-y-1 overflow-y-auto">
           <SidebarItem id="overview" label="Overview" icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>} />
           <SidebarItem id="users" label="User Management" icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>} />
           <SidebarItem id="vehicles" label="Vehicle Approvals" icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>} />
@@ -207,45 +224,66 @@ function AdminDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
-        <header className="bg-white shadow py-6 px-8 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800 capitalize">{activeTab.replace('-', ' ')}</h2>
+      <div className="flex-1 overflow-auto flex flex-col">
+        {/* Header */}
+        <header className="bg-white shadow py-4 px-4 lg:px-8 flex justify-between items-center sticky top-0 z-20">
+          <div className="flex items-center">
+            <button onClick={() => setIsSidebarOpen(true)} className="lg:hidden mr-4 text-gray-600">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <h2 className="text-xl lg:text-2xl font-bold text-gray-800 capitalize">{activeTab.replace('-', ' ')}</h2>
+          </div>
           <div className="flex items-center space-x-4">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold">
+            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-bold border-2 border-blue-200">
               A
             </div>
           </div>
         </header>
 
-        <main className="p-8">
+        <main className="flex-1 p-4 lg:p-8">
           {loading && activeTab !== 'overview' ? (
-            <div className="text-center text-gray-500 py-12">Loading...</div>
+            <div className="flex justify-center items-center h-full">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
           ) : (
             <>
               {/* OVERVIEW TAB */}
               {activeTab === 'overview' && (
-                <div className="space-y-8">
+                <div className="space-y-8 animate-fade-in">
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatsCard title="Total Users" value={stats.totalUsers} color="bg-blue-500" />
-                    <StatsCard title="Active Rides" value={stats.activeRides} color="bg-green-500" />
-                    <StatsCard title="Pending Vehicles" value={stats.pendingVehicles} color="bg-orange-500" />
-                    <StatsCard title="Open Complaints" value={stats.pendingComplaints} color="bg-red-500" />
+                    <StatsCard title="Total Users" value={stats.totalUsers} color="bg-gradient-to-br from-blue-500 to-blue-600" />
+                    <StatsCard title="Active Rides" value={stats.activeRides} color="bg-gradient-to-br from-green-500 to-green-600" />
+                    <StatsCard title="Pending Vehicles" value={stats.pendingVehicles} color="bg-gradient-to-br from-orange-400 to-orange-500" />
+                    <StatsCard title="Open Complaints" value={stats.pendingComplaints} color="bg-gradient-to-br from-red-500 to-red-600" />
                   </div>
 
-                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-bold text-gray-800 mb-4">Live Rides Feed</h3>
-                    {liveRides.length === 0 ? <p className="text-gray-500">No active rides currently.</p> : (
+                  {/* Live Rides Feed */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                      <span className="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
+                      Live Rides Feed
+                    </h3>
+                    {liveRides.length === 0 ? <p className="text-gray-500 py-4 text-center">No active rides currently.</p> : (
                       <div className="space-y-4">
                         {liveRides.map(ride => (
-                          <div key={ride._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
-                            <div className="flex items-center space-x-4">
-                              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                          <div key={ride._id} className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-100 transition hover:shadow-md">
+                            <div className="flex items-center space-x-4 mb-3 md:mb-0">
+                              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
+                                {ride.driver?.name?.charAt(0)}
+                              </div>
                               <div>
-                                <p className="font-bold text-gray-800">{ride.driver?.name} <span className="text-gray-400 mx-2">→</span> {ride.requester?.name}</p>
-                                <p className="text-sm text-gray-500">{ride.startLocation} to {ride.destination}</p>
+                                <p className="font-bold text-gray-800 text-sm">
+                                  {ride.driver?.name} <span className="text-gray-400 mx-1">➜</span> {ride.requester?.name}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1 flex items-center">
+                                  <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                  {ride.startLocation} to {ride.destination}
+                                </p>
                               </div>
                             </div>
-                            <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">{ride.status}</span>
+                            <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full w-fit">
+                              {ride.status.replace('_', ' ')}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -256,79 +294,109 @@ function AdminDashboard() {
 
               {/* USERS TAB */}
               {activeTab === 'users' && (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden animate-fade-in">
+                  <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 gap-4">
                     <h3 className="font-bold text-gray-700">Registered Users</h3>
-                    <button onClick={() => setShowAdminModal(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow text-sm font-bold flex items-center">
+                    <button onClick={() => setShowAdminModal(true)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm text-sm font-bold flex items-center transition-transform active:scale-95">
                       <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" /></svg>
                       Create New Admin
                     </button>
                   </div>
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {users.map(user => (
-                        <tr key={user._id}>
-                          <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{user.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-gray-500">{user.email}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {user.role === 'ADMIN' ? (
-                              <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                Administrator
-                              </span>
-                            ) : (
-                              <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isRider ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
-                                {user.isRider ? 'Passenger & Driver' : 'Passenger'}
-                              </span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.isBlocked ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
-                              {user.isBlocked ? 'BLOCKED' : 'Active'}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                            {/* Make Admin Removed */}
-                            <button
-                              onClick={() => handleBlockUser(user._id)}
-                              className={`${user.isBlocked ? 'text-green-600 hover:text-green-900' : 'text-orange-600 hover:text-orange-900'}`}
-                            >
-                              {user.isBlocked ? 'Unblock' : 'Block'}
-                            </button>
-                            <button onClick={() => handleDeleteUser(user._id)} className="text-red-600 hover:text-red-900">Delete</button>
-                          </td>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Email</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {users.map(user => (
+                          <tr key={user._id} className="hover:bg-gray-50 transition-colors">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <img
+                                  className="h-10 w-10 rounded-full object-cover border border-gray-200"
+                                  src={user.profilePhotoUrl || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"}
+                                  alt=""
+                                />
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                                  <div className="text-xs text-gray-500 md:hidden">{user.email}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">{user.email}</td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {user.role === 'ADMIN' ? (
+                                <span className="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                                  Administrator
+                                </span>
+                              ) : (
+                                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${user.isRider ? 'bg-blue-100 text-blue-800 border-blue-200' : 'bg-gray-100 text-gray-800 border-gray-200'}`}>
+                                  {user.isRider ? 'Passenger & Driver' : 'Passenger'}
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full border ${user.isBlocked ? 'bg-red-100 text-red-800 border-red-200' : 'bg-green-100 text-green-800 border-green-200'}`}>
+                                {user.isBlocked ? 'BLOCKED' : 'Active'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                              {/* Make Admin Removed */}
+                              <button
+                                onClick={() => handleBlockUser(user._id)}
+                                className={`${user.isBlocked ? 'text-green-600 hover:text-green-800 bg-green-50' : 'text-orange-600 hover:text-orange-800 bg-orange-50'} px-3 py-1 rounded-md transition-colors`}
+                              >
+                                {user.isBlocked ? 'Unblock' : 'Block'}
+                              </button>
+                              <button onClick={() => handleDeleteUser(user._id)} className="text-red-600 hover:text-red-800 bg-red-50 px-3 py-1 rounded-md transition-colors">Delete</button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               )}
 
               {/* VEHICLES TAB */}
               {activeTab === 'vehicles' && (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  {pendingVehicles.length === 0 ? <p className="text-gray-500">No pending vehicle applications.</p> : (
-                    <div className="space-y-4">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-fade-in">
+                  {pendingVehicles.length === 0 ? <p className="text-gray-500 text-center py-8">No pending vehicle applications.</p> : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                       {pendingVehicles.map(v => (
-                        <div key={v._id} className="border border-gray-200 rounded-lg p-4 flex justify-between items-center hover:bg-gray-50">
-                          <div>
-                            <h4 className="font-bold text-gray-800">{v.bikeName} {v.bikeModel}</h4>
-                            <p className="text-sm text-gray-500">Owner: {v.owner?.name}</p>
-                            <p className="text-xs text-gray-400">Reg: {v.registrationNumber}</p>
+                        <div key={v._id} className="border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all flex flex-col bg-white">
+                          <div className="relative h-48 bg-gray-100 rounded-lg mb-4 overflow-hidden group">
+                            {/* Image Mockup - Replace with v.vehiclePhotoUrl if available */}
+                            <img
+                              src={v.systemImageUrl || "/api/placeholder/400/320"}
+                              alt="Vehicle"
+                              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                            />
+                            <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                              {v.color}
+                            </div>
                           </div>
-                          <div className="flex space-x-2">
-                            <button onClick={() => handleApproveVehicle(v._id)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-sm text-sm font-bold">
+
+                          <div className="flex-1 mb-4">
+                            <h4 className="font-bold text-gray-800 text-lg">{v.bikeName} <span className="text-sm font-normal text-gray-500">({v.bikeModel})</span></h4>
+                            <div className="text-sm text-gray-600 space-y-1 mt-2">
+                              <p><span className="font-semibold">Owner:</span> {v.owner?.name}</p>
+                              <p><span className="font-semibold">Reg No:</span> {v.registrationNumber}</p>
+                              <p><span className="font-semibold">License:</span> {v.licenseNumber}</p>
+                            </div>
+                          </div>
+
+                          <div className="flex space-x-3 mt-auto pt-4 border-t border-gray-100">
+                            <button onClick={() => handleApproveVehicle(v._id)} className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg shadow-sm text-sm font-bold transition-transform active:scale-95">
                               Approve
                             </button>
-                            <button onClick={() => handleRejectVehicle(v._id)} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow-sm text-sm font-bold">
+                            <button onClick={() => handleRejectVehicle(v._id)} className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg shadow-sm text-sm font-bold transition-transform active:scale-95">
                               Reject
                             </button>
                           </div>
@@ -341,18 +409,31 @@ function AdminDashboard() {
 
               {/* COMPLAINTS TAB */}
               {activeTab === 'complaints' && (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  {complaints.length === 0 ? <p className="text-gray-500">No complaints found.</p> : (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 animate-fade-in">
+                  {complaints.length === 0 ? <p className="text-gray-500 text-center py-8">No complaints found.</p> : (
                     <div className="space-y-4">
                       {complaints.map(c => (
-                        <div key={c._id} className="border border-gray-200 rounded-lg p-4">
-                          <div className="flex justify-between mb-2">
-                            <span className="font-bold text-gray-800">From: {c.submittedBy?.name}</span>
-                            <span className={`text-xs px-2 py-1 rounded-full ${c.status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{c.status}</span>
+                        <div key={c._id} className="border border-gray-200 rounded-xl p-5 hover:bg-gray-50 transition-colors">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-2 h-2 rounded-full ${c.status === 'resolved' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                              <span className="font-bold text-gray-800">From: {c.submittedBy?.name}</span>
+                            </div>
+                            <span className={`text-xs px-2 py-1 rounded-full border ${c.status === 'resolved' ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'}`}>
+                              {c.status.toUpperCase()}
+                            </span>
                           </div>
-                          <p className="text-gray-600 mb-3">{c.description}</p>
+
+                          <div className="bg-gray-100 p-3 rounded-lg text-gray-600 text-sm mb-4">
+                            "{c.description}"
+                          </div>
+
                           {c.status !== 'resolved' && (
-                            <button onClick={() => handleResolveComplaint(c._id)} className="text-sm text-blue-600 hover:underline">Mark Resolved</button>
+                            <div className="flex justify-end">
+                              <button onClick={() => handleResolveComplaint(c._id)} className="text-sm font-medium text-blue-600 hover:text-blue-800 bg-blue-50 px-4 py-2 rounded-lg transition-colors">
+                                Mark as Resolved
+                              </button>
+                            </div>
                           )}
                         </div>
                       ))}
@@ -365,30 +446,32 @@ function AdminDashboard() {
           )}
         </main>
       </div>
-      {/* CREATE ADMIN MODAL */}
+
+      {/* CREATE ADMIN MODAL (Unchanged mostly, just styling tweaks) */}
       {showAdminModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full shadow-2xl">
-            <h3 className="text-2xl font-bold mb-4 text-gray-800">Create New Admin</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl animate-scale-in">
+            <h3 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Create New Admin</h3>
             <form onSubmit={handleCreateAdmin} className="space-y-4">
+              {/* Form fields same as before, just styled inputs */}
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
-                <input type="text" required className="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                <input type="text" required className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={newAdmin.name} onChange={e => setNewAdmin({ ...newAdmin, name: e.target.value })} />
               </div>
               <div>
-                <label className="block text-gray-700 text-sm font-bold mb-2">Username</label>
-                <input type="text" required className="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                <label className="block text-gray-700 text-sm font-bold mb-2">Username (Email)</label>
+                <input type="text" required className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={newAdmin.email} onChange={e => setNewAdmin({ ...newAdmin, email: e.target.value })} />
               </div>
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                <input type="password" required className="w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                <input type="password" required className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   value={newAdmin.password} onChange={e => setNewAdmin({ ...newAdmin, password: e.target.value })} />
               </div>
-              <div className="flex justify-end space-x-3 pt-4">
-                <button type="button" onClick={() => setShowAdminModal(false)} className="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-bold">Create Admin</button>
+              <div className="flex justify-end space-x-3 pt-6">
+                <button type="button" onClick={() => setShowAdminModal(false)} className="px-5 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
+                <button type="submit" className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold shadow-lg shadow-blue-500/30 transition-transform active:scale-95">Create Admin</button>
               </div>
             </form>
           </div>
@@ -399,9 +482,9 @@ function AdminDashboard() {
 }
 
 const StatsCard = ({ title, value, color }) => (
-  <div className={`rounded-lg p-6 text-white shadow-lg transform hover:-translate-y-1 transition-transform ${color}`}>
-    <h4 className="text-sm font-semibold opacity-80 uppercase tracking-wide">{title}</h4>
-    <p className="text-4xl font-bold mt-2">{value}</p>
+  <div className={`rounded-xl p-6 text-white shadow-lg transform hover:-translate-y-1 transition-transform ${color}`}>
+    <h4 className="text-xs font-bold opacity-80 uppercase tracking-wider mb-1">{title}</h4>
+    <p className="text-4xl font-bold">{value}</p>
   </div>
 );
 

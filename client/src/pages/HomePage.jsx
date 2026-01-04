@@ -1,9 +1,10 @@
 // client/src/pages/HomePage.jsx
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function HomePage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
     <div className="flex flex-col min-h-screen bg-surface-50">
       {/* Header */}
@@ -28,10 +29,11 @@ function HomePage() {
               </div>
             </Link>
 
-            <div className="flex items-center space-x-4">
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-4">
               <Link
                 to="/login"
-                className="hidden md:block text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-brand-600 transition-colors"
               >
                 Sign In
               </Link>
@@ -42,7 +44,41 @@ function HomePage() {
                 Get Started
               </Link>
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden p-2 text-gray-600 hover:text-brand-600 focus:outline-none"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                {isMobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                )}
+              </svg>
+            </button>
           </div>
+
+          {/* Mobile Menu Dropdown */}
+          {isMobileMenuOpen && (
+            <div className="absolute top-full left-0 w-full px-6 py-4 md:hidden">
+              <div className="glass-panel rounded-2xl p-4 shadow-xl flex flex-col space-y-4 animate-fade-in">
+                <Link
+                  to="/login"
+                  className="text-center font-medium text-gray-700 py-2 hover:bg-gray-50 rounded-lg"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="btn-primary text-center justify-center shadow-lg"
+                >
+                  Get Started
+                </Link>
+              </div>
+            </div>
+          )}
         </nav>
       </header>
 
